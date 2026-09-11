@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>KATIA • 100</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #000000;
+      --card: #0a0a0c;
+      --border: #222226;
+      --border-light: #333338;
+      --text: #ffffff;
+      --text-muted: #666666;
+      --text-sub: #999999;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background-color: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 16px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ЭКРАН ВХОДА (ОБХОД БЛОКИРОВКИ МУЗЫКИ) */
+    #gateScreen {
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      transition: opacity 0.5s ease, visibility 0.5s;
+    }
+
+    .gate-brand {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .gate-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.2rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .gate-sub {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      font-weight: 300;
+      line-height: 1.5;
+      margin-bottom: 36px;
+    }
+
+    .gate-btn {
+      background: transparent;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+      padding: 16px 36px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .gate-btn:active {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    /* ВЕРХНЯЯ ШАПКА */
+    .top-bar {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .status-counter {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-sub);
+    }
+
+    .sound-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sound-btn.playing {
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+
+    /* ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ */
+    .mode-switch {
+      display: flex;
+      background: #111114;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 3px;
+      max-width: 320px;
+      width: 100%;
+      margin: 8px auto;
+      z-index: 10;
+    }
+    .mode-pill {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 8px 0;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mode-pill.active {
+      background: #ffffff;
+      color: #000000;
+      font-weight: 600;
+    }
+
+    /* ГЛАВНАЯ КАРТОЧКА */
+    .card-frame {
+      width: 100%;
+      max-width: 440px;
+      height: 380px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .card-lang {
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .card-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.85rem;
+      line-height: 1.35;
+      color: #ffffff;
+      font-weight: 300;
+      margin-bottom: 14px;
+    }
+
+    .card-trans {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      font-style: italic;
+      line-height: 1.45;
+      font-weight: 300;
+      max-width: 90%;
+    }
+
+    /* СКРЕТЧ-ХОЛСТ (МАТОВЫЙ ГРАФИТ) */
+    #scratchCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      z-index: 50;
+      touch-action: none;
+    }
+
+    /* НИЖНЯЯ ПАНЕЛЬ ДЕЙСТВИЙ */
+    .bottom-controls {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .btn-main {
+      width: 100%;
+      height: 52px;
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .btn-main:active {
+      transform: scale(0.98);
+    }
+
+    .sub-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-sub {
+      flex: 1;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      padding: 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-sub:active {
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+
+    /* МОНОХРОМНАЯ КНОПКА РЕАКЦИЙ (TikTok Style) */
+    .reaction-fab {
+      position: fixed;
+      right: 20px;
+      bottom: 95px;
+      width: 54px;
+      height: 54px;
+      background: #111114;
+      border: 1px solid var(--border-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #ffffff;
+      z-index: 90;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    }
+    .reaction-fab:active {
+      transform: scale(0.92);
+    }
+
+    .flying-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999;
+      animation: flyParticle 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    @keyframes flyParticle {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(0.5);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-70vh) scale(1.4);
+      }
+    }
+
+    /* МОДАЛЬНЫЙ СЕРТИФИКАТ / МАНИФЕСТ */
+    .manifest-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(15px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .manifest-card {
+      background: #09090b;
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      padding: 36px 24px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+    .manifest-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .manifest-card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 300;
+      margin-bottom: 14px;
+      color: #ffffff;
+    }
+    .manifest-card p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 28px;
+      font-weight: 300;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Аудиотрек (music.mp3) -->
+  <audio id="bgAudio" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ЭКРАН ВХОДА -->
+  <div id="gateScreen">
+    <div class="gate-brand">Exhibition • 100</div>
+    <h1 class="gate-title">Katia</h1>
+    <p class="gate-sub">Сто искренних высказываний на языках мира.<br>Включите звук для атмосферы.</p>
+    <button class="gate-btn" onclick="enterApp()">Вскрыть архив</button>
+  </div>
+
+  <!-- ШАПКА -->
+  <header class="top-bar">
+    <div class="status-counter" id="counterNum">001 / 100</div>
+    <button class="sound-btn" id="soundToggle" onclick="toggleAudio()">
+      <span>Sound</span>
+    </button>
+  </header>
+
+  <!-- ПЕРЕКЛЮЧАТЕЛЬ МИНИ-ИГР -->
+  <div class="mode-switch">
+    <button class="mode-pill active" id="tabScratch" onclick="switchMode('scratch')">Скретч-слой</button>
+    <button class="mode-pill" id="tabRoulette" onclick="switchMode('roulette')">Рулетка</button>
+  </div>
+
+  <!-- КАРТОЧКА -->
+  <main class="card-frame" id="cardFrame">
+    <!-- Матовый графитовый скретч-слой -->
+    <canvas id="scratchCanvas"></canvas>
+
+    <div class="card-lang" id="cardLang">Беларуская</div>
+    <div class="card-quote" id="cardQuote">«...»</div>
+    <div class="card-trans" id="cardTrans"></div>
+  </main>
+
+  <!-- КНОПКА СПАМА МОНОХРОМНЫМИ СЕРДЕЧКАМИ -->
+  <div class="reaction-fab" id="fabBtn" onclick="spawnReaction(event)">🖤</div>
+
+  <!-- НИЖНЯЯ ПАНЕЛЬ -->
+  <footer class="bottom-controls">
+    <button class="btn-main" id="mainActionBtn" onclick="handleAction()">
+      Новый скретч-билет
+    </button>
+    <div class="sub-actions">
+      <button class="btn-sub" onclick="openManifest()">Манифест</button>
+      <button class="btn-sub" onclick="speakCompliment()">Голос</button>
+    </div>
+  </footer>
+
+  <!-- МОДАЛЬНЫЙ МАНИФЕСТ (ВМЕСТО ДЕТСКОГО СЕРТИФИКАТА) -->
+  <div class="manifest-modal" id="manifestModal" onclick="closeManifest()">
+    <div class="manifest-card" onclick="event.stopPropagation()">
+      <div class="manifest-tag">Официальный вердикт</div>
+      <h2 id="manifestTitle">Магистр заботы</h2>
+      <p id="manifestDesc">
+        Присваивается Кате за сверхспособность сохранять чуткость, согревать словом и рассеивать любую тревогу.
+      </p>
+      <button class="gate-btn" style="padding: 12px 28px;" onclick="closeManifest()">Принять</button>
+    </div>
+  </div>
+
+  <script>
+    // БАЗА ИЗ 100 КОМПЛИМЕНТОВ
+    const items = [
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, твая дабрыня здольная сагрэць нават у самыя лютыя маразы.", trans: "Катя, твоя доброта способна согреть даже в самые лютые морозы." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катюша, твоё чувство юмора — это чистое искусство. С тобой невозможно не смеяться.", trans: "" },
+      { lang: "Français", langCode: "fr-FR", text: "Katia, ton sourire est un rayon de soleil pour tous ceux qui t'entourent.", trans: "Катя, твоя улыбка — лучик солнца для всех вокруг." },
+      { lang: "Беларуская", langCode: "be-BY", text: "Твая шчырасць і натуральнасць — рэдкі і бясцэнны скарб.", trans: "Твоя искренность и естественность — редкое и бесценное сокровище." },
+      { lang: "Italiano", langCode: "it-IT", text: "Hai un cuore d'oro e un'anima straordinariamente premurosa.", trans: "У тебя золотое сердце и необычайно заботливая душа." },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты удивительно заботливая: ты всегда тонко чувствуешь, когда человеку нужна поддержка.", trans: "" },
+      { lang: "Español", langCode: "es-ES", text: "Katia, tu energía alegre llena cualquier habitación de luz y alegría.", trans: "Катя, твоя весёлая энергия наполняет любое пространство светом и радостью." },
+      { lang: "Беларуская", langCode: "be-BY", text: "Побач з табой заўсёды так утульна, нібы вяртаешся дадому пасля доўгай вандроўкі.", trans: "Рядом с тобой всегда так уютно, будто возвращаешься домой после долгого странствия." },
+      { lang: "English", langCode: "en-US", text: "You have that effortless charm and kindness that make people feel safe.", trans: "В тебе есть то непринуждённое обаяние и доброта, рядом с которыми чувствуешь себя безопасно." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катя, твои истории можно слушать бесконечно — в тебе столько жизни и заразительного смеха.", trans: "" },
+
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, твой заразлівы смех — самы лепшы сродак ад любога суму.", trans: "Катя, твой заразительный смех — лучшее лекарство от любой грусти." },
+      { lang: "Deutsch", langCode: "de-DE", text: "Deine Herzlichkeit und Fürsorge sind ein wunderbares Geschenk für die Welt.", trans: "Твоя сердечность и забота — прекрасный подарок для этого мира." },
+      { lang: "Українська", langCode: "uk-UA", text: "Катю, твоя щирість і світла душа надихають усіх навколо.", trans: "Катя, твоя искренность и светлая душа вдохновляют всех вокруг." },
+      { lang: "Беларуская", langCode: "be-BY", text: "Ты ўмееш выслухаць так уважліва і чула, як ніхто іншы ў свеце.", trans: "Ты умеешь выслушать так внимательно и чутко, как никто другой." },
+      { lang: "Polski", langCode: "pl-PL", text: "Kasiu, twoja dobroć i poczucie humoru czynią cię kimś zupełnie wyjątkowym.", trans: "Катя, твоя доброта и чувство юмора делают тебя совершенно исключительной." },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты сочетаешь в себе редкую женственность, острый ум и обезоруживающую простоту.", trans: "" },
+      { lang: "Português", langCode: "pt-PT", text: "A tua presença traz calma, carinho e momentos inesquecíveis.", trans: "Твоё присутствие приносит спокойствие, нежность и незабываемые моменты." },
+      { lang: "Беларуская", langCode: "be-BY", text: "Твае вочы свецяцца такой жыццёвай радасцю, што немагчыма не ўсміхнуцца ў адказ.", trans: "Твои глаза светятся такой жизненной радостью, что невозможно не улыбнуться в ответ." },
+      { lang: "日本語", langCode: "ja-JP", text: "カチャ、あなたの優しさは星のように心を照らします。", trans: "Катя, твоя доброта, словно звёзды, озаряет сердце." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катя, ты самая надёжная подруга. Быть с тобой рядом — настоящее счастье.", trans: "" },
+
+      { lang: "Беларуская", langCode: "be-BY", text: "Ты нібы вясновы ветрык: лёгкая, вясёлая і заўсёды нясеш з сабой свята.", trans: "Ты словно весенний ветерок: лёгкая, весёлая и всегда несёшь с собой праздник." },
+      { lang: "Nederlands", langCode: "nl-NL", text: "Je hebt een prachtige ziel en een geweldig gevoel voor humor.", trans: "У тебя прекрасная душа и великолепное чувство юмора." },
+      { lang: "Svenska", langCode: "sv-SE", text: "Du sprider så mycket värme och omtanke omkring dig varje dag.", trans: "Ты распространяешь столько тепла и заботы вокруг себя каждый день." },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты умеешь находить повод для улыбки даже в самых обычных мелочах дня.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, дзякуй за тое, што ты заўсёды шчырая і сапраўдная, без фальшу.", trans: "Катя, спасибо за то, что ты всегда искренняя и настоящая, без притворства." },
+      { lang: "Ελληνικά", langCode: "el-GR", text: "Η καλοσύνη και το λαμπερό σου χαμόγελο ομορφαίνουν τον κόσμο.", trans: "Твоя доброта и сияющая улыбка украшают этот мир." },
+      { lang: "Čeština", langCode: "cs-CZ", text: "Káťo, tvůj smích je neuvěřitelně nakažlivý a tvoje srdce plné lásky.", trans: "Катя, твой смех невероятно заразителен, а сердце полно любви." },
+      { lang: "Русский", langCode: "ru-RU", text: "С тобой никогда не бывает скучно. Твоя спонтанность — это отдельное искусство.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "Твая прыгажосць — гэта святло, якое ідзе з самай глыбіні тваёй душы.", trans: "Твоя красота — это свет, исходящий из самой глубины твоей души." },
+      { lang: "한국어", langCode: "ko-KR", text: "카챠, 당신의 따뜻한 배려는 모두의 마음을 편안하게 만듭니다.", trans: "Катя, твоя тёплая забота дарит покой сердцам окружающих." },
+
+      { lang: "Türkçe", langCode: "tr-TR", text: "Senin gibi şefkatli, neşeli ve güzel bir kalbe sahip biri çok nadirdir.", trans: "Человек с таким заботливым, весёлым и прекрасным сердцем — огромная редкость." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катя, ты умеешь согреть словом так, как не согреет ни один плед в ненастный день.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "У табе столькі энергіі і натхнення, што побач хочацца ствараць і марыць.", trans: "В тебе столько энергии и вдохновения, что рядом хочется творить и мечтать." },
+      { lang: "Norsk", langCode: "no-NO", text: "Ditt gode hjerte og din herlige humor gjør deg til en fantastisk venn.", trans: "Твоё доброе сердце и чудесный юмор делают тебя потрясающим другом." },
+      { lang: "ქართული", langCode: "ka-GE", text: "შენი სიკეთე და მხიარული სული ნამდვილი საჩუქარია.", trans: "Твоя доброта и весёлый дух — бесценный подарок." },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты никогда не оставишь близкого один на один с тревогой. Твоя верность поражает.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, ты ўмееш разрадзіць любое напружанне адным трапным і добрым словам.", trans: "Катя, ты умеешь разрядить любую обстановку одним метким и добрым словом." },
+      { lang: "Dansk", langCode: "da-DK", text: "Du bringer så meget hygge, glæde og varme ind i livet.", trans: "Ты приносишь в жизнь столько уюта, радости и душевного тепла." },
+      { lang: "Magyar", langCode: "hu-HU", text: "Kátya, a kedvességed és a vidámságod felejthetetlen.", trans: "Катя, твоя доброта и жизнерадостность незабываемы." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катюша, у тебя редкий дар: делать мир вокруг себя чуточку счастливее.", trans: "" },
+
+      { lang: "Беларуская", langCode: "be-BY", text: "Твая мудрасць і ўменне даць добрую параду заўсёды трапляюць у самае сэрца.", trans: "Твоя мудрость и чуткий совет всегда попадают в самую точку." },
+      { lang: "Suomi", langCode: "fi-FI", text: "Lämpösi, hauskuutesi ja huolenpitosi tekevät sinusta korvaamattoman.", trans: "Твоё тепло, чувство юмора и забота делают тебя незаменимой." },
+      { lang: "Română", langCode: "ro-RO", text: "Katia, sufletul tău bun și glumele tale aduc mereu zâmbete.", trans: "Катя, твоя добрая душа и шутки всегда вызывают улыбку." },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты невероятно изящна, но главное — у тебя безупречный внутренний вкус на искренность.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, нават калі на душы дождж — размова з табой вяртае чыстае неба.", trans: "Катя, даже если на душе дождь — разговор с тобой возвращает ясное небо." },
+      { lang: "中文", langCode: "zh-CN", text: "卡佳，你的善良与体贴，就像温暖的春风。", trans: "Катя, твоя доброта и забота подобны тёплому весеннему ветру." },
+      { lang: "Íslenska", langCode: "is-IS", text: "Hlýja þín og gleði lýsa upp myrkustu daga.", trans: "Твоё тепло и радость озаряют самые сумрачные дни." },
+      { lang: "Беларуская", langCode: "be-BY", text: "Твая ўсмешка — гэта сапраўднае мастацтва, якое робіць свет больш спакойным.", trans: "Твоя улыбка — искусство, делающее мир намного спокойнее." },
+      { lang: "Gaeilge", langCode: "ga-IE", text: "Tá croí óir agat agus aoibh gháire a lasann gach seomra.", trans: "У тебя золотое сердце и улыбка, освещающая любую комнату." },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты умеешь ценить настоящую дружбу, и это чувствуется в каждом твоём взгляде.", trans: "" },
+
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, твая пяшчота і клопат пра блізкіх не ведаюць стомы.", trans: "Катя, твоя нежность и забота о близких не знают усталости." },
+      { lang: "Français", langCode: "fr-FR", text: "Tu as cette élégance rare d'être incroyablement drôle et infiniment douce.", trans: "В тебе есть эта редкая элегантность: быть невероятно смешной и бесконечно нежной." },
+      { lang: "Հայերեն", langCode: "hy-AM", text: "Կատյա, քո բարությունն ու լուսավոր հոգին հիացնում են բոլորին:", trans: "Катя, твоя доброта и светлая душа восхищают каждого." },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты тот редкий человек, с которым можно часами молчать — и это будет самое уютное молчание.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "Дзякуй, што ты ёсць. Без цябе гэты свет быў бы значна больш ціхім і пустым.", trans: "Спасибо, что ты есть. Без тебя этот мир был бы куда более блёклым и тихим." },
+      { lang: "Italiano", langCode: "it-IT", text: "Katia, la tua risata è pura musica per chiunque ti sia vicino.", trans: "Катя, твой смех — чистая музыка для каждого, кто рядом." },
+      { lang: "Lietuvių", langCode: "lt-LT", text: "Tavo gerumas ir rūpestingumas daro šį pasaulį daug šviesesnį.", trans: "Твоя доброта и забота делают этот мир намного светлее." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катя, твоя искренность обезоруживает. Рядом с тобой отпадает необходимость притворяться.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "У табе жыве ціхае, глыбокае святло, якое здольнае развеяць любы смутак.", trans: "В тебе живёт тихий, глубокий свет, способный рассеять любую печаль." },
+      { lang: "Español", langCode: "es-ES", text: "Eres una amiga leal, divertida y con una empatía sin límites.", trans: "Ты верная, весёлая подруга с бесконечной эмпатией." },
+
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, твае абдымкі валодаюць чароўнай сілай вяртаць душэўны спакой.", trans: "Катя, твои объятия обладают волшебной силой возвращать душевный покой." },
+      { lang: "Latviešu", langCode: "lv-LV", text: "Tavs smaids un labestība ir kā silts saules stars.", trans: "Твоя улыбка и добросердечие — словно тёплый луч солнца." },
+      { lang: "Русский", langCode: "ru-RU", text: "У тебя поразительное чувство такта и лёгкая самоирония, присущая только мудрым людям.", trans: "" },
+      { lang: "English", langCode: "en-US", text: "You don't just brighten the room, Katia — you make it feel like home.", trans: "Ты не просто озаряешь комнату, Катя — ты даришь ощущение дома." },
+      { lang: "Беларуская", langCode: "be-BY", text: "Ты ўмееш заўважаць прыгожае ў звычайных рэчах і дзяліцца гэтым хараством.", trans: "Ты умеешь замечать красивое в простых вещах и делиться этой красотой." },
+      { lang: "Български", langCode: "bg-BG", text: "Катя, твоята грижа и весел дух са безценни за всички нас.", trans: "Катя, твоя забота и весёлый дух бесценны для каждого из нас." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катюша, ты как чашка горячего чая в холодный вечер — надёжный и верный источник тепла.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "Твая энергія натхняе верыць у лепшае і ніколі не сумнявацца ў сабе.", trans: "Твоя энергия вдохновляет верить в лучшее и никогда не сомневаться в себе." },
+      { lang: "Tiếng Việt", langCode: "vi-VN", text: "Sự quan tâm và nụ cười rạng rỡ của bạn mang lại niềm vui cho mọi người.", trans: "Твоя забота и сияющая улыбка приносят радость всем." },
+      { lang: "Hrvatski", langCode: "hr-HR", text: "Katia, tvoje toplo srce i duhovitost čine svaki dan posebnim.", trans: "Катя, твоё тёплое сердце и остроумие делают любой день особенным." },
+
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, твая дабрыня не патрабуе нічога ўзамен — ты шчодра дзелішся цяплом.", trans: "Катя, твоя доброта не ждёт ничего взамен — ты щедро делишься теплом." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катя, твои спонтанные шутки и голосовые — это то, что мгновенно спасает самый тяжёлый день.", trans: "" },
+      { lang: "Kiswahili", langCode: "sw-KE", text: "Wema wako na tabasamu lako vinang'aa kama nyota.", trans: "Твоя доброта и твоя улыбка сияют, словно звёзды." },
+      { lang: "Беларуская", langCode: "be-BY", text: "Ты ствараеш вакол сябе прастору абсалютнага даверу і спакою.", trans: "Ты создаёшь вокруг себя пространство абсолютного доверия и покоя." },
+      { lang: "Eesti", langCode: "et-EE", text: "Sinu hoolivus ja soe naeratus toovad alati päikese välja.", trans: "Твоя забота и тёплая улыбка всегда приносят солнце." },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты смелая, лёгкая на подъём и верная себе. Это вызывает безграничное уважение.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "Побач з табой немагчыма заставацца сумным — ты заражаеш сваёй любоўю да жыцця.", trans: "Рядом с тобой невозможно грустить — ты заражаешь своей любовью к жизни." },
+      { lang: "Cymraeg", langCode: "cy-GB", text: "Mae caredigrwydd dy galon yn gwneud y byd yn lle mwy disglair.", trans: "Доброта твоего сердца делает этот мир ярче." },
+      { lang: "Slovenčina", langCode: "sk-SK", text: "Káťa, tvoja láskavosť a úprimný smiech sú skutočným darom.", trans: "Катя, твоя доброта и искренний смех — настоящий подарок." },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты помнишь важные для других мелочи. Такая внимательность сегодня — великая редкость.", trans: "" },
+
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, ты сапраўднае сонейка, якое прабіваецца праз самыя густыя хмары.", trans: "Катя, ты настоящее солнышко, пробивающееся сквозь самые плотные тучи." },
+      { lang: "Bahasa Indonesia", langCode: "id-ID", text: "Kebaikan hati dan tawamu yang tulus membuat semua orang bahagia.", trans: "Твоя доброта и искренний смех дарят людям счастье." },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты умеешь искренне и щедро радоваться чужим успехам — это признак большого благородства.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "Твая прысутнасць робіць любую падзею значнай, а просты вечар — незабыўным.", trans: "Твоё присутствие делает любое событие значимым, а простой вечер — незабываемым." },
+      { lang: "العربية", langCode: "ar-SA", text: "كاتيا، لطفك وروحك المرحة يجعلان الحياة أكثر جمالاً.", trans: "Катя, твоя чуткость и жизнерадостный дух делают эту жизнь прекраснее." },
+      { lang: "עברית", langCode: "he-IL", text: "קאטיה, טוב הלב שלך והחיוך שלך מאירים את העולם.", trans: "Катя, твоё доброе сердце и улыбка озаряют этот мир." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катюша, у тебя редкий дар: находить свет даже там, где другие видят лишь сумерки.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "Ты сяброўка, якой можна даверыць самае патаемнае і быць упэўненай у падтрымцы.", trans: "Ты подруга, которой можно доверить самое сокровенное и быть уверенным в поддержке." },
+      { lang: "Português", langCode: "pt-BR", text: "Katia, seu jeito carinhoso e engraçado transforma o dia de qualquer um.", trans: "Катя, твоя заботливая и остроумная натура меняет день любого человека." },
+      { lang: "Latīna", langCode: "la", text: "Anima tua candida et iucunda lumen in tenebris est.", trans: "Твоя чистая и радостная душа — это свет во тьме." },
+
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, твая ўсмешка — найлепшы доказ таго, што ў свеце засталося шмат прыгожага.", trans: "Катя, твоя улыбка — лучшее доказательство того, что в мире много прекрасного." },
+      { lang: "Русский", langCode: "ru-RU", text: "Рядом с тобой всегда чувствуешь себя услышанным, понятым и важным.", trans: "" },
+      { lang: "Esperanto", langCode: "eo", text: "Via bonkoreco kaj gaja humuro igas vin tute unika amiko.", trans: "Твоя доброта и весёлый юмор делают тебя совершенно уникальным другом." },
+      { lang: "Беларуская", langCode: "be-BY", text: "Ты чалавек з велізарным сэрцам, у якім хопіць месца і пяшчоты для кожнага блізкага.", trans: "Ты человек с огромным сердцем, в котором хватит места и нежности для каждого близкого." },
+      { lang: "Deutsch", langCode: "de-DE", text: "Katia, du bist ein wunderbarer Mensch mit einer ansteckenden Lebensfreude.", trans: "Катя, ты чудесный человек с заразительной любовью к жизни." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катюша, в тебе горит тот самый огонёк, благодаря которому любая встреча становится праздником.", trans: "" },
+      { lang: "Беларуская", langCode: "be-BY", text: "Дзякуй за твой клопат, за цярплівасць і за кожную хвіліну сапраўднага смеху.", trans: "Спасибо за твою заботу, за терпение и за каждую минуту настоящего смеха." },
+      { lang: "English", langCode: "en-US", text: "Never forget how truly irreplaceable and deeply cherished you are, Katia.", trans: "Никогда не забывай, насколько ты незаменима и глубоко дорога." },
+      { lang: "Беларуская", langCode: "be-BY", text: "Каця, ты адзіная і непаўторная. Заставайся заўсёды такой жа светлай.", trans: "Катя, ты единственная и неповторимая. Оставайся всегда такой же светлой." },
+      { lang: "Русский", langCode: "ru-RU", text: "Катя, ты заслуживаешь самого необъятного счастья. Пусть этот мир всегда отвечает тебе добром.", trans: "" }
+    ];
+
+    const manifests = [
+      { t: "Магистр Заботы", d: "Официально подтверждено: способность Кати согреть словом и укрыть от невзгод превосходит все мировые стандарты." },
+      { t: "Архитектор Смеха", d: "За феноменальное чувство юмора, самоиронию и голосовые сообщения, спасающие даже в самые серые дни." },
+      { t: "Хранитель Уюта", d: "Человек, рядом с которым отпадает необходимость носить маски и притворяться кем-то другим." },
+      { t: "Константа Света", d: "Катя — ориентир искренности и душевной чистоты, которая остаётся неизменной в любом водовороте событий." }
+    ];
+
+    let current = 0;
+    let mode = 'scratch'; // 'scratch' или 'roulette'
+    let isScratching = false;
+
+    // 1. ВХОД И МУЗЫКА
+    const bgAudio = document.getElementById('bgAudio');
+    const soundToggle = document.getElementById('soundToggle');
+
+    function enterApp() {
+      const gate = document.getElementById('gateScreen');
+      gate.style.opacity = '0';
+      setTimeout(() => { gate.style.visibility = 'hidden'; }, 500);
+
+      // Серебряный/белый салют
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ffffff', '#888888', '#222222']
+      });
+
+      bgAudio.play().then(() => {
+        soundToggle.classList.add('playing');
+        soundToggle.innerText = "Sound: On";
+      }).catch(() => {});
+
+      loadItem(0);
+    }
+
+    function toggleAudio() {
+      if (bgAudio.paused) {
+        bgAudio.play();
+        soundToggle.classList.add('playing');
+        soundToggle.innerText = "Sound: On";
+      } else {
+        bgAudio.pause();
+        soundToggle.classList.remove('playing');
+        soundToggle.innerText = "Sound: Off";
+      }
+    }
+
+    // 2. МАТОВЫЙ СКРЕТЧ-СЛОЙ
+    const canvas = document.getElementById('scratchCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function initScratch() {
+      canvas.style.display = 'block';
+      const frame = document.getElementById('cardFrame');
+      canvas.width = frame.clientWidth;
+      canvas.height = frame.clientHeight;
+
+      // Матовый графитовый градиент
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, '#1c1c20');
+      grad.addColorStop(1, '#111114');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Тонкая белая рамка внутри
+      ctx.strokeStyle = '#2b2b32';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(12, 12, canvas.width - 24, canvas.height - 24);
+
+      // Надпись
+      ctx.fillStyle = '#888888';
+      ctx.font = '500 11px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.letterSpacing = '3px';
+      ctx.fillText('[ СОТРИ ПАЛЬЦЕМ ]', canvas.width / 2, canvas.height / 2);
+    }
+
+    function scratch(e) {
+      if (!isScratching) return;
+      const rect = canvas.getBoundingClientRect();
+      const cx = e.touches ? e.touches[0].clientX : e.clientX;
+      const cy = e.touches ? e.touches[0].clientY : e.clientY;
+      const x = cx - rect.left;
+      const y = cy - rect.top;
+
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, 26, 0, Math.PI * 2);
+      ctx.fill();
+
+      if ('vibrate' in navigator) navigator.vibrate(5);
+    }
+
+    canvas.addEventListener('mousedown', () => isScratching = true);
+    window.addEventListener('mouseup', () => isScratching = false);
+    canvas.addEventListener('mousemove', scratch);
+
+    canvas.addEventListener('touchstart', (e) => { isScratching = true; scratch(e); }, { passive: true });
+    window.addEventListener('touchend', () => isScratching = false);
+    canvas.addEventListener('touchmove', scratch, { passive: true });
+
+    // 3. ПЕРЕКЛЮЧЕНИЕ ЭЛЕМЕНТОВ
+    function loadItem(idx) {
+      current = idx;
+      const it = items[current];
+      document.getElementById('cardLang').innerText = it.lang;
+      document.getElementById('cardQuote').innerText = `«${it.text}»`;
+      document.getElementById('cardTrans').innerText = it.trans ? it.trans : "";
+      document.getElementById('counterNum').innerText = `${String(current + 1).padStart(3, '0')} / 100`;
+
+      if (mode === 'scratch') {
+        initScratch();
+      } else {
+        canvas.style.display = 'none';
+      }
+    }
+
+    function switchMode(m) {
+      mode = m;
+      document.getElementById('tabScratch').classList.toggle('active', m === 'scratch');
+      document.getElementById('tabRoulette').classList.toggle('active', m === 'roulette');
+
+      const btn = document.getElementById('mainActionBtn');
+      if (m === 'scratch') {
+        btn.innerText = "Новый скретч-билет";
+        initScratch();
+      } else {
+        canvas.style.display = 'none';
+        btn.innerText = "Испытать удачу";
+      }
+    }
+
+    // 4. ДЕЙСТВИЕ ГЛАВНОЙ КНОПКИ
+    function handleAction() {
+      if (mode === 'scratch') {
+        confetti({
+          particleCount: 25,
+          spread: 50,
+          origin: { y: 0.8 },
+          colors: ['#ffffff', '#555555']
+        });
+        current = (current + 1) % items.length;
+        loadItem(current);
+      } else {
+        // Рулетка
+        let ticks = 0;
+        const timer = setInterval(() => {
+          const rand = Math.floor(Math.random() * items.length);
+          document.getElementById('cardLang').innerText = items[rand].lang;
+          document.getElementById('cardQuote').innerText = "Поиск в архиве...";
+          document.getElementById('cardTrans').innerText = "";
+          ticks++;
+          if (ticks > 10) {
+            clearInterval(timer);
+            confetti({
+              particleCount: 40,
+              spread: 60,
+              origin: { y: 0.7 },
+              colors: ['#ffffff', '#aaaaaa']
+            });
+            current = Math.floor(Math.random() * items.length);
+            loadItem(current);
+          }
+        }, 70);
+      }
+    }
+
+    // 5. МОНОХРОМНЫЙ СПАМ РЕАКЦИЯМИ
+    function spawnReaction(e) {
+      const p = document.createElement('div');
+      p.className = 'flying-particle';
+      const symbols = ['🖤', '🤍', '✧', '✦', '·'];
+      p.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+
+      const x = e.clientX || (window.innerWidth - 45);
+      const y = e.clientY || (window.innerHeight - 120);
+
+      p.style.left = `${x + (Math.random() * 30 - 15)}px`;
+      p.style.top = `${y}px`;
+      p.style.fontSize = `${Math.random() * 16 + 18}px`;
+
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1600);
+
+      if ('vibrate' in navigator) navigator.vibrate(8);
+    }
+
+    // 6. МАНИФЕСТ
+    function openManifest() {
+      const m = manifests[Math.floor(Math.random() * manifests.length)];
+      document.getElementById('manifestTitle').innerText = m.t;
+      document.getElementById('manifestDesc').innerText = m.d;
+      document.getElementById('manifestModal').style.display = 'flex';
+    }
+
+    function closeManifest() {
+      document.getElementById('manifestModal').style.display = 'none';
+    }
+
+    // 7. ОЗВУЧКА
+    function speakCompliment() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const it = items[current];
+        const u = new SpeechSynthesisUtterance(it.text);
+        u.lang = it.langCode;
+        u.rate = 0.9;
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      if (mode === 'scratch') initScratch();
+    });
+  </script>
+</body>
+</html>
