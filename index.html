@@ -363,9 +363,270 @@
       margin-bottom: 28px;
       font-weight: 300;
     }
+
+    /* ===== ФОНОВАЯ АНИМАЦИЯ (мягкое сияние + плывущие частицы) ===== */
+    #bgGlow {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    #bgGlow .aurora {
+      position: absolute;
+      width: 60vw;
+      height: 60vw;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.35;
+      animation: auroraDrift 22s ease-in-out infinite alternate;
+    }
+    #bgGlow .aurora.a1 { background: #c9a24b; top: -15%; left: -15%; }
+    #bgGlow .aurora.a2 { background: #6b3fa0; bottom: -20%; right: -10%; animation-duration: 28s; animation-delay: -6s; }
+    #bgGlow .aurora.a3 { background: #2b6b6b; top: 30%; right: 20%; width: 40vw; height: 40vw; animation-duration: 34s; animation-delay: -12s; }
+    @keyframes auroraDrift {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(6%, 4%) scale(1.12); }
+      100% { transform: translate(-4%, -3%) scale(0.95); }
+    }
+    #bgParticles { position: absolute; inset: 0; }
+    .bg-particle {
+      position: absolute;
+      bottom: -5%;
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 12px;
+      animation-name: floatUp;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-115vh) translateX(20px) rotate(60deg); opacity: 0; }
+    }
+
+    /* ===== ПЛАВНОЕ ПОЯВЛЕНИЕ ТЕКСТА В КАРТОЧКЕ ===== */
+    .reveal-el {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal-el.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== СТРИК ДНЕЙ ===== */
+    .streak-badge {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: #e8c477;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ===== СТРОКА НАСТРОЕНИЯ ===== */
+    .mood-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      max-width: 320px;
+      width: 100%;
+      margin: 2px auto 0;
+      z-index: 10;
+    }
+    .mood-btn {
+      background: #111114;
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      font-size: 1.1rem;
+      width: 42px;
+      height: 34px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .mood-btn.active {
+      border-color: #e8c477;
+      transform: scale(1.08);
+    }
+
+    /* ===== 2x2 СЕТКА ДОП. КНОПОК ===== */
+    .sub-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .btn-sub {
+      flex: none;
+    }
+    .btn-sub.locked {
+      color: var(--text-muted);
+      border-color: var(--border);
+    }
+
+    /* ===== ТОСТ (короткое уведомление) ===== */
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%) translateY(20px);
+      background: #ffffff;
+      color: #000000;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 3000;
+      pointer-events: none;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ===== МИНИ-ИГРА "ПОЙМАЙ СЕРДЕЧКИ" ===== */
+    #gameOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.94);
+      z-index: 1500;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .game-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      margin-bottom: 6px;
+    }
+    .game-sub {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+    .game-progress {
+      font-size: 0.75rem;
+      color: #e8c477;
+      letter-spacing: 0.15em;
+      margin-bottom: 10px;
+    }
+    .game-field {
+      position: relative;
+      width: 90vw;
+      max-width: 420px;
+      height: 50vh;
+    }
+    .game-heart {
+      position: absolute;
+      font-size: 2rem;
+      cursor: pointer;
+      animation: heartPop 0.3s ease;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+    }
+    @keyframes heartPop {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+
+    /* ===== ГАЛЕРЕЯ ПРОЙДЕННОГО ПУТИ ===== */
+    #galleryModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      padding: calc(env(safe-area-inset-top) + 20px) 20px 20px;
+    }
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+    }
+    .gallery-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 1.6rem;
+    }
+    .gallery-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .gallery-list {
+      overflow-y: auto;
+      max-width: 440px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+    }
+    .gallery-item {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .gallery-item .g-lang {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .gallery-item .g-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.35;
+    }
+    .gallery-empty {
+      color: var(--text-sub);
+      font-size: 0.85rem;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    /* ===== СЕКРЕТНЫЙ КОМПЛИМЕНТ ===== */
+    .secret-card {
+      background: linear-gradient(160deg, #14110a, #0a0806);
+      border: 1px solid #4a3a1c;
+    }
+    .secret-tag {
+      color: #e8c477 !important;
+    }
+    .secret-card h2 {
+      color: #f0d8a0 !important;
+    }
   </style>
 </head>
 <body>
+
+  <!-- ФОНОВАЯ АНИМАЦИЯ -->
+  <div id="bgGlow">
+    <div class="aurora a1"></div>
+    <div class="aurora a2"></div>
+    <div class="aurora a3"></div>
+    <div id="bgParticles"></div>
+  </div>
 
   <!-- Аудиотрек (music.mp3) -->
   <audio id="bgAudio" loop preload="auto">
@@ -383,15 +644,24 @@
   <!-- ШАПКА -->
   <header class="top-bar">
     <div class="status-counter" id="counterNum">001 / 100</div>
+    <div class="streak-badge" id="streakBadge">🔥 0 дней</div>
     <button class="sound-btn" id="soundToggle" onclick="toggleAudio()">
       <span>Sound</span>
     </button>
   </header>
 
+  <!-- НАСТРОЕНИЕ -->
+  <div class="mood-row">
+    <button class="mood-btn" id="moodSad" onclick="setMood('sad')" title="Грустно">😔</button>
+    <button class="mood-btn" id="moodOk" onclick="setMood('ok')" title="Нормально">😊</button>
+    <button class="mood-btn" id="moodGreat" onclick="setMood('great')" title="Отлично">🤩</button>
+  </div>
+
   <!-- ПЕРЕКЛЮЧАТЕЛЬ МИНИ-ИГР -->
   <div class="mode-switch">
     <button class="mode-pill active" id="tabScratch" onclick="switchMode('scratch')">Скретч-слой</button>
     <button class="mode-pill" id="tabRoulette" onclick="switchMode('roulette')">Рулетка</button>
+    <button class="mode-pill" id="tabGame" onclick="switchMode('game')">Игра</button>
   </div>
 
   <!-- КАРТОЧКА -->
@@ -399,9 +669,9 @@
     <!-- Матовый графитовый скретч-слой -->
     <canvas id="scratchCanvas"></canvas>
 
-    <div class="card-lang" id="cardLang">Беларуская</div>
-    <div class="card-quote" id="cardQuote">«...»</div>
-    <div class="card-trans" id="cardTrans"></div>
+    <div class="card-lang reveal-el" id="cardLang">Беларуская</div>
+    <div class="card-quote reveal-el" id="cardQuote">«...»</div>
+    <div class="card-trans reveal-el" id="cardTrans"></div>
   </main>
 
   <!-- КНОПКА СПАМА МОНОХРОМНЫМИ СЕРДЕЧКАМИ -->
@@ -415,8 +685,31 @@
     <div class="sub-actions">
       <button class="btn-sub" onclick="openManifest()">Манифест</button>
       <button class="btn-sub" onclick="speakCompliment()">Голос</button>
+      <button class="btn-sub" onclick="shareCompliment()">Поделиться</button>
+      <button class="btn-sub" onclick="openGallery()">Галерея</button>
     </div>
+    <button class="btn-sub" id="secretBtn" style="width:100%;" onclick="openSecret()">🔒 Секрет</button>
   </footer>
+
+  <!-- ТОСТ -->
+  <div id="toast"></div>
+
+  <!-- МИНИ-ИГРА "ПОЙМАЙ СЕРДЕЧКИ" -->
+  <div id="gameOverlay">
+    <div class="game-title">Поймай сердечки</div>
+    <div class="game-sub">Успей коснуться всех, пока они не улетели</div>
+    <div class="game-progress" id="gameProgress">0 / 6</div>
+    <div class="game-field" id="gameField"></div>
+  </div>
+
+  <!-- ГАЛЕРЕЯ ПРОЙДЕННОГО ПУТИ -->
+  <div id="galleryModal">
+    <div class="gallery-header">
+      <h2>Пройденный путь</h2>
+      <button class="gallery-close" onclick="closeGallery()">✕</button>
+    </div>
+    <div class="gallery-list" id="galleryList"></div>
+  </div>
 
   <!-- МОДАЛЬНЫЙ МАНИФЕСТ (ВМЕСТО ДЕТСКОГО СЕРТИФИКАТА) -->
   <div class="manifest-modal" id="manifestModal" onclick="closeManifest()">
@@ -427,6 +720,16 @@
         Присваивается Кате за сверхспособность сохранять чуткость, согревать словом и рассеивать любую тревогу.
       </p>
       <button class="gate-btn" style="padding: 12px 28px;" onclick="closeManifest()">Принять</button>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО СЕКРЕТНОГО КОМПЛИМЕНТА -->
+  <div class="manifest-modal" id="secretModal" onclick="closeSecret()">
+    <div class="manifest-card secret-card" onclick="event.stopPropagation()">
+      <div class="manifest-tag secret-tag" id="secretTag">Секретный архив</div>
+      <h2 id="secretTitle">🔒 Заблокировано</h2>
+      <p id="secretDesc">Скоро откроется.</p>
+      <button class="gate-btn" style="padding: 12px 28px;" onclick="closeSecret()">Закрыть</button>
     </div>
   </div>
 
@@ -541,7 +844,60 @@
       { lang: "Беларуская", langCode: "be-BY", text: "Дзякуй за твой клопат, за цярплівасць і за кожную хвіліну сапраўднага смеху.", trans: "Спасибо за твою заботу, за терпение и за каждую минуту настоящего смеха." },
       { lang: "English", langCode: "en-US", text: "Never forget how truly irreplaceable and deeply cherished you are, Katia.", trans: "Никогда не забывай, насколько ты незаменима и глубоко дорога." },
       { lang: "Беларуская", langCode: "be-BY", text: "Каця, ты адзіная і непаўторная. Заставайся заўсёды такой жа светлай.", trans: "Катя, ты единственная и неповторимая. Оставайся всегда такой же светлой." },
-      { lang: "Русский", langCode: "ru-RU", text: "Катя, ты заслуживаешь самого необъятного счастья. Пусть этот мир всегда отвечает тебе добром.", trans: "" }
+      { lang: "Русский", langCode: "ru-RU", text: "Катя, ты заслуживаешь самого необъятного счастья. Пусть этот мир всегда отвечает тебе добром.", trans: "" },
+
+      // --- ОТ ПЕРВОГО ЛИЦА ---
+      { lang: "Русский", langCode: "ru-RU", text: "Больше всего я ценю в тебе то, что с тобой можно быть настоящей — без масок и оправданий.", trans: "", cat: "firstPerson", mood: ["ok", "great"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Мне нравится, что ты никогда не судишь — ты просто рядом, что бы ни случилось.", trans: "", cat: "firstPerson", mood: ["sad", "ok"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Я благодарна судьбе за то, что среди миллионов людей она свела меня именно с тобой.", trans: "", cat: "firstPerson", mood: ["great"] },
+      { lang: "Русский", langCode: "ru-RU", text: "То, что мне нравится в тебе больше всего — ты умеешь радоваться моим победам так, будто они твои.", trans: "", cat: "firstPerson", mood: ["great"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Я ценю в тебе честность — даже когда она неудобная, ей всегда можно доверять.", trans: "", cat: "firstPerson" },
+      { lang: "Русский", langCode: "ru-RU", text: "Мне спокойнее жить, зная, что у меня есть ты — надёжный тыл в любую погоду.", trans: "", cat: "firstPerson", mood: ["sad", "ok"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Я восхищаюсь тем, как ты умеешь превращать обычный день в маленький праздник.", trans: "", cat: "firstPerson", mood: ["ok", "great"] },
+      { lang: "Русский", langCode: "ru-RU", text: "То, что я больше всего ценю — ты помнишь мелочи, о которых я сама уже забыла.", trans: "", cat: "firstPerson" },
+      { lang: "Русский", langCode: "ru-RU", text: "Я горжусь тем, что могу называть тебя своей подругой.", trans: "", cat: "firstPerson", mood: ["great"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Мне важно, чтобы ты знала: рядом с тобой я чувствую себя понятой без единого лишнего слова.", trans: "", cat: "firstPerson", mood: ["sad"] },
+
+      // --- МИНИ-СТИХИ ---
+      { lang: "Русский", langCode: "ru-RU", text: "Katя, как звезда во тьме, / Свет твой ярче всех вокруг — / Даришь тепл на самом дне, / Лучшая из лучших, друг.", trans: "", cat: "poem" },
+      { lang: "Русский", langCode: "ru-RU", text: "Пусть смех твой звонкий, как ручей, / Течёт сквозь годы без преград — / Ты солнце средь пасмурных дней, / Ты — самый ценный клад.", trans: "", cat: "poem", mood: ["great"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Когда темно и тяжело, / Твой голос — тихий, добрый свет. / С тобой всегда теплей, светло, / Спасибо, что ты есть на свет.", trans: "", cat: "poem", mood: ["sad"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты — как весенний первый цвет, / Что пробивается сквозь снег. / В тебе надежды яркий свет, / И самый добрый человек.", trans: "", cat: "poem" },
+      { lang: "Русский", langCode: "ru-RU", text: "Катюша, ты как звонкий смех / В осенний серый, хмурый день. / С тобой теплей, чем со всех, / Ты — солнца тёплая ступень.", trans: "", cat: "poem", mood: ["ok"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Пусть в жизни будет меньше гроз, / А больше — искренних минут. / Ты стоишь тысячи всех роз, / Пусть все дороги приведут.", trans: "", cat: "poem" },
+      { lang: "Русский", langCode: "ru-RU", text: "Ты — сочетание огня и льда: / Спокойна, но горишь внутри. / Такой не встретишь никогда, / Свети и дальше, не гори.", trans: "", cat: "poem", mood: ["great"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Спасибо, что всегда ты рядом, / Что в трудный час подставишь плечо. / С тобой любым делам я рада, / Ты — то, что сердцу горячо.", trans: "", cat: "poem", mood: ["sad", "ok"] },
+
+      // --- ФАКТЫ О НЕЙ В СТИЛЕ КОМПЛИМЕНТА ---
+      { lang: "Русский", langCode: "ru-RU", text: "Знаешь ли ты, что твоя улыбка официально признана лучшим антидепрессантом в этом чате?", trans: "", cat: "fact", mood: ["great", "ok"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Забавный факт: количество людей, которых ты поддержала добрым словом, не поддаётся подсчёту.", trans: "", cat: "fact" },
+      { lang: "Русский", langCode: "ru-RU", text: "Научно не доказано, но и не опровергнуто: рядом с тобой время течёт приятнее.", trans: "", cat: "fact", mood: ["ok"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Известно, что твой юмор способен поднять настроение даже в самый серый понедельник.", trans: "", cat: "fact", mood: ["sad", "ok"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Факт: ты входишь в редкий процент людей, которые слушают по-настоящему, а не просто ждут своей очереди говорить.", trans: "", cat: "fact" },
+      { lang: "Русский", langCode: "ru-RU", text: "Знаешь ли ты, что твоя доброта работает как заразительный вирус — и это единственный вирус, которым хочется заразиться?", trans: "", cat: "fact", mood: ["great"] },
+      { lang: "Русский", langCode: "ru-RU", text: "Установленный факт: рядом с тобой даже неловкое молчание превращается в уютное.", trans: "", cat: "fact" },
+      { lang: "Русский", langCode: "ru-RU", text: "Согласно всем неофициальным опросам, ты — лучший человек, к которому можно написать в три часа ночи.", trans: "", cat: "fact", mood: ["sad"] },
+
+      // --- НОВЫЕ ЯЗЫКИ ---
+      { lang: "Slovenščina", langCode: "sl-SI", text: "Katja, tvoja dobrota in nasmeh osvetljujeta vsak dan.", trans: "Катя, твоя доброта и улыбка озаряют каждый день." },
+      { lang: "Srpski", langCode: "sr-RS", text: "Katja, tvoja dobrota i vedar duh čine svet lepšim.", trans: "Катя, твоя доброта и весёлый дух делают мир прекраснее." },
+      { lang: "Shqip", langCode: "sq-AL", text: "Katja, zemra jote e mirë ndriçon jetën e të gjithëve.", trans: "Катя, твоё доброе сердце озаряет жизнь всех вокруг." },
+      { lang: "Català", langCode: "ca-ES", text: "Katia, la teva bondat i el teu somriure il·luminen el món.", trans: "Катя, твоя доброта и улыбка озаряют мир." },
+      { lang: "Malti", langCode: "mt-MT", text: "Katia, il-qalb tajba tiegħek iddawwal kuljum ta' kulħadd.", trans: "Катя, твоё доброе сердце озаряет каждый день окружающих." },
+      { lang: "Azərbaycan", langCode: "az-AZ", text: "Katya, sənin xeyirxahlığın və gülüşün dünyanı işıqlandırır.", trans: "Катя, твоя доброта и улыбка озаряют мир." },
+      { lang: "O'zbek", langCode: "uz-UZ", text: "Katya, sening mehribonliging va kulgingiz dunyoni yorug' qiladi.", trans: "Катя, твоя доброта и смех делают мир светлее." },
+      { lang: "ไทย", langCode: "th-TH", text: "คัทย่า ความใจดีและรอยยิ้มของเธอทำให้โลกสดใส", trans: "Катя, твоя доброта и улыбка делают мир ярче." },
+      { lang: "हिन्दी", langCode: "hi-IN", text: "काट्या, तुम्हारी दयालुता और मुस्कान दुनिया को रोशन करती है।", trans: "Катя, твоя доброта и улыбка озаряют мир." },
+      { lang: "فارسی", langCode: "fa-IR", text: "کاتیا، مهربانی و لبخند تو دنیا را روشن می‌کند.", trans: "Катя, твоя доброта и улыбка озаряют мир." }
+    ];
+
+    // Секретные комплименты — открываются только по особым условиям
+    const secretItems = [
+      { lang: "Русский", text: "Секрет №1: даже в самый обычный вторник ты умудряешься быть самым ярким событием дня.", trans: "" },
+      { lang: "Русский", text: "Секрет №2: если бы дружбу можно было держать в руках, твоя была бы самой тёплой из всех.", trans: "" },
+      { lang: "Русский", text: "Секрет №3: ты одна из немногих людей, ради которых стоит выходить из дома в плохую погоду.", trans: "" },
+      { lang: "Русский", text: "Секрет №4: каждый раз, когда тебе грустно, где-то рядом становится грустно и вселенной — так что улыбайся, ей это важно.", trans: "" },
+      { lang: "Русский", text: "Секрет №5: этот сайт был сделан не ради ста комплиментов, а ради того, чтобы ты знала — тебя ценят по-настоящему.", trans: "" }
     ];
 
     const manifests = [
@@ -554,6 +910,172 @@
     let current = 0;
     let mode = 'scratch'; // 'scratch' или 'roulette'
     let isScratching = false;
+
+    // --- СИСТЕМА "БЕЗ ПОВТОРОВ" (shuffle-bag) ---
+    // Идея: держим перемешанную очередь индексов всех 100 комплиментов.
+    // Показываем по очереди, ничего не повторяя, пока очередь не закончится.
+    // Когда все 100 показаны — перемешиваем заново и начинаем новый круг.
+    // Прогресс сохраняется в localStorage, поэтому при новом заходе на сайт
+    // (в другой день) показ продолжается с того же места, а не с начала.
+
+    const STORAGE_KEY = 'katia100_state_v1';
+
+    function shuffle(array) {
+      const a = array.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const s = JSON.parse(raw);
+          if (Array.isArray(s.queue) && typeof s.pos === 'number') {
+            return s;
+          }
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    function saveState(state) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    }
+
+    // --- ПРОЙДЕННЫЙ ПУТЬ (для галереи), объявлено здесь, ДО создания очереди,
+    // потому что очередь при пересборке уже использует getSeenSet() ---
+    const SEEN_KEY = 'katia100_seen_v1';
+    function getSeenSet() {
+      try {
+        const raw = localStorage.getItem(SEEN_KEY);
+        return raw ? new Set(JSON.parse(raw)) : new Set();
+      } catch (e) { return new Set(); }
+    }
+    function rememberSeen(idx) {
+      const s = getSeenSet();
+      s.add(idx);
+      try { localStorage.setItem(SEEN_KEY, JSON.stringify([...s])); } catch (e) {}
+    }
+
+    let queueState = loadState();
+    if (!queueState || queueState.queue.length !== items.length) {
+      // Нет сохранённого состояния, либо список комплиментов изменился (добавили новые) —
+      // формируем новую очередь. Новые (ещё не увиденные) комплименты ставим вперёд,
+      // чтобы после обновления сайта в первую очередь показывались свежие карточки,
+      // а уже виденные раньше — во вторую половину круга.
+      const seenBefore = getSeenSet();
+      const allIdx = [...Array(items.length).keys()];
+      const freshIdx = allIdx.filter(i => !seenBefore.has(i));
+      const oldIdx = allIdx.filter(i => seenBefore.has(i));
+      queueState = { queue: [...shuffle(freshIdx), ...shuffle(oldIdx)], pos: 0 };
+      saveState(queueState);
+    }
+    // Примечание: если очередь уже была исчерпана в прошлый раз, следующий вызов
+    // nextUnseenIndex() сам обнаружит это и корректно засчитает круг + перемешает заново.
+
+    // Возвращает индекс следующего непоказанного комплимента и продвигает очередь
+    function nextUnseenIndex() {
+      if (queueState.pos >= queueState.queue.length) {
+        // Круг закончен — перемешиваем заново для нового круга и считаем это как полный проход
+        queueState = { queue: shuffle([...Array(items.length).keys()]), pos: 0 };
+        markCycleCompleted();
+      }
+      const idx = queueState.queue[queueState.pos];
+      queueState.pos++;
+      saveState(queueState);
+      rememberSeen(idx);
+      return idx;
+    }
+
+    // Ищет в оставшейся части очереди первый элемент, подходящий под настроение,
+    // ставит его следующим и возвращает через nextUnseenIndex() — так "мешок без повторов"
+    // не ломается, просто мы вытягиваем из него нужную карту раньше времени.
+    let currentMood = null;
+    function nextIndexForMood(moodKey) {
+      for (let i = queueState.pos; i < queueState.queue.length; i++) {
+        const idx = queueState.queue[i];
+        const it = items[idx];
+        if (!it.mood || it.mood.includes(moodKey)) {
+          [queueState.queue[queueState.pos], queueState.queue[i]] = [queueState.queue[i], queueState.queue[queueState.pos]];
+          return nextUnseenIndex();
+        }
+      }
+      // Ничего подходящего не осталось в этом круге — просто берём следующий как обычно
+      return nextUnseenIndex();
+    }
+
+    function setMood(m) {
+      currentMood = m;
+      ['moodSad', 'moodOk', 'moodGreat'].forEach(id => document.getElementById(id).classList.remove('active'));
+      const map = { sad: 'moodSad', ok: 'moodOk', great: 'moodGreat' };
+      document.getElementById(map[m]).classList.add('active');
+      confetti({ particleCount: 20, spread: 45, origin: { y: 0.7 }, colors: ['#ffffff', '#e8c477'] });
+      loadItem(nextIndexForMood(m));
+    }
+
+    // --- СТРИК ДНЕЙ ПОДРЯД ---
+    const STREAK_KEY = 'katia100_streak_v1';
+    function updateStreak() {
+      const today = new Date().toISOString().slice(0, 10);
+      let s = { lastVisit: null, streak: 0, cycles: 0 };
+      try {
+        const raw = localStorage.getItem(STREAK_KEY);
+        if (raw) s = JSON.parse(raw);
+      } catch (e) {}
+
+      if (s.lastVisit !== today) {
+        const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+        s.streak = (s.lastVisit === yesterday) ? (s.streak + 1) : 1;
+        s.lastVisit = today;
+        try { localStorage.setItem(STREAK_KEY, JSON.stringify(s)); } catch (e) {}
+
+        if (s.streak === 7 || s.streak === 30) {
+          setTimeout(() => {
+            confetti({ particleCount: 120, spread: 90, origin: { y: 0.5 }, colors: ['#e8c477', '#ffffff'] });
+            showToast(s.streak === 7 ? '🔥 7 дней подряд! Открылся секрет' : '🔥 30 дней подряд! Ты невероятна');
+          }, 900);
+        }
+      }
+      document.getElementById('streakBadge').innerText = `🔥 ${s.streak} ${dayWord(s.streak)}`;
+      return s;
+    }
+    function dayWord(n) {
+      const n10 = n % 10, n100 = n % 100;
+      if (n100 >= 11 && n100 <= 14) return 'дней';
+      if (n10 === 1) return 'день';
+      if (n10 >= 2 && n10 <= 4) return 'дня';
+      return 'дней';
+    }
+    function markCycleCompleted() {
+      try {
+        const raw = localStorage.getItem(STREAK_KEY);
+        const s = raw ? JSON.parse(raw) : { lastVisit: null, streak: 0, cycles: 0 };
+        s.cycles = (s.cycles || 0) + 1;
+        localStorage.setItem(STREAK_KEY, JSON.stringify(s));
+      } catch (e) {}
+    }
+    function getStreakState() {
+      try {
+        const raw = localStorage.getItem(STREAK_KEY);
+        return raw ? JSON.parse(raw) : { lastVisit: null, streak: 0, cycles: 0 };
+      } catch (e) { return { lastVisit: null, streak: 0, cycles: 0 }; }
+    }
+
+    // --- ТОСТ ---
+    let toastTimer = null;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+    }
 
     // 1. ВХОД И МУЗЫКА
     const bgAudio = document.getElementById('bgAudio');
@@ -577,7 +1099,8 @@
         soundToggle.innerText = "Sound: On";
       }).catch(() => {});
 
-      loadItem(0);
+      updateStreak();
+      loadItem(nextUnseenIndex());
     }
 
     function toggleAudio() {
@@ -650,10 +1173,23 @@
     function loadItem(idx) {
       current = idx;
       const it = items[current];
-      document.getElementById('cardLang').innerText = it.lang;
-      document.getElementById('cardQuote').innerText = `«${it.text}»`;
-      document.getElementById('cardTrans').innerText = it.trans ? it.trans : "";
-      document.getElementById('counterNum').innerText = `${String(current + 1).padStart(3, '0')} / 100`;
+      const elLang = document.getElementById('cardLang');
+      const elQuote = document.getElementById('cardQuote');
+      const elTrans = document.getElementById('cardTrans');
+
+      // Плавное появление: сперва скрываем, затем проявляем с небольшой задержкой каждый элемент
+      [elLang, elQuote, elTrans].forEach(el => el.classList.remove('in'));
+
+      elLang.innerText = it.lang;
+      elQuote.innerText = `«${it.text}»`;
+      elTrans.innerText = it.trans ? it.trans : "";
+      document.getElementById('counterNum').innerText = `${String(queueState.pos).padStart(3, '0')} / ${items.length}`;
+
+      requestAnimationFrame(() => {
+        setTimeout(() => elLang.classList.add('in'), 60);
+        setTimeout(() => elQuote.classList.add('in'), 180);
+        setTimeout(() => elTrans.classList.add('in'), 320);
+      });
 
       if (mode === 'scratch') {
         initScratch();
@@ -666,19 +1202,27 @@
       mode = m;
       document.getElementById('tabScratch').classList.toggle('active', m === 'scratch');
       document.getElementById('tabRoulette').classList.toggle('active', m === 'roulette');
+      document.getElementById('tabGame').classList.toggle('active', m === 'game');
 
       const btn = document.getElementById('mainActionBtn');
       if (m === 'scratch') {
         btn.innerText = "Новый скретч-билет";
         initScratch();
-      } else {
+      } else if (m === 'roulette') {
         canvas.style.display = 'none';
         btn.innerText = "Испытать удачу";
+      } else {
+        canvas.style.display = 'none';
+        btn.innerText = "Поймать сердечки";
       }
     }
 
     // 4. ДЕЙСТВИЕ ГЛАВНОЙ КНОПКИ
     function handleAction() {
+      if (mode === 'game') {
+        startGame();
+        return;
+      }
       if (mode === 'scratch') {
         confetti({
           particleCount: 25,
@@ -686,8 +1230,7 @@
           origin: { y: 0.8 },
           colors: ['#ffffff', '#555555']
         });
-        current = (current + 1) % items.length;
-        loadItem(current);
+        loadItem(nextUnseenIndex());
       } else {
         // Рулетка
         let ticks = 0;
@@ -705,8 +1248,7 @@
               origin: { y: 0.7 },
               colors: ['#ffffff', '#aaaaaa']
             });
-            current = Math.floor(Math.random() * items.length);
-            loadItem(current);
+            loadItem(nextUnseenIndex());
           }
         }, 70);
       }
@@ -755,6 +1297,149 @@
         window.speechSynthesis.speak(u);
       }
     }
+
+    // 8. МИНИ-ИГРА "ПОЙМАЙ СЕРДЕЧКИ"
+    const HEARTS_TOTAL = 6;
+    let heartsCaught = 0;
+    let gameTimeoutIds = [];
+
+    function startGame() {
+      const overlay = document.getElementById('gameOverlay');
+      const field = document.getElementById('gameField');
+      field.innerHTML = '';
+      heartsCaught = 0;
+      gameTimeoutIds.forEach(clearTimeout);
+      gameTimeoutIds = [];
+      document.getElementById('gameProgress').innerText = `0 / ${HEARTS_TOTAL}`;
+      overlay.style.display = 'flex';
+
+      for (let i = 0; i < HEARTS_TOTAL; i++) {
+        const id = setTimeout(() => spawnHeart(field), i * 500 + Math.random() * 300);
+        gameTimeoutIds.push(id);
+      }
+    }
+
+    function spawnHeart(field) {
+      const h = document.createElement('div');
+      h.className = 'game-heart';
+      h.innerText = ['🖤', '🤍', '💛'][Math.floor(Math.random() * 3)];
+      const maxX = field.clientWidth - 40;
+      const maxY = field.clientHeight - 40;
+      h.style.left = `${Math.random() * Math.max(maxX, 10)}px`;
+      h.style.top = `${Math.random() * Math.max(maxY, 10)}px`;
+
+      const flyAway = setTimeout(() => h.remove(), 2600);
+      h.addEventListener('click', () => {
+        clearTimeout(flyAway);
+        h.remove();
+        heartsCaught++;
+        document.getElementById('gameProgress').innerText = `${heartsCaught} / ${HEARTS_TOTAL}`;
+        if ('vibrate' in navigator) navigator.vibrate(10);
+        if (heartsCaught >= HEARTS_TOTAL) {
+          setTimeout(finishGame, 300);
+        }
+      });
+      field.appendChild(h);
+    }
+
+    function finishGame() {
+      document.getElementById('gameOverlay').style.display = 'none';
+      confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 }, colors: ['#ffffff', '#e8c477'] });
+      loadItem(nextUnseenIndex());
+    }
+
+    // 9. ПОДЕЛИТЬСЯ / СОХРАНИТЬ
+    function shareCompliment() {
+      const it = items[current];
+      const text = `«${it.text}»${it.trans ? '\n' + it.trans : ''}\n\n— со страницы комплиментов для Кати 🤍`;
+
+      if (navigator.share) {
+        navigator.share({ text }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('Скопировано ✓');
+        }).catch(() => {
+          showToast('Не удалось скопировать');
+        });
+      } else {
+        showToast('Скопируй текст вручную 🤍');
+      }
+    }
+
+    // 10. ГАЛЕРЕЯ ПРОЙДЕННОГО ПУТИ
+    function openGallery() {
+      const seen = [...getSeenSet()].sort((a, b) => a - b);
+      const list = document.getElementById('galleryList');
+      list.innerHTML = '';
+
+      if (seen.length === 0) {
+        list.innerHTML = '<div class="gallery-empty">Пока пусто — открой первый комплимент</div>';
+      } else {
+        seen.forEach(idx => {
+          const it = items[idx];
+          if (!it) return;
+          const div = document.createElement('div');
+          div.className = 'gallery-item';
+          div.innerHTML = `<div class="g-lang">${it.lang}</div><div class="g-text">«${it.text}»</div>`;
+          list.appendChild(div);
+        });
+      }
+      document.getElementById('galleryModal').style.display = 'flex';
+    }
+
+    function closeGallery() {
+      document.getElementById('galleryModal').style.display = 'none';
+    }
+
+    // 11. СЕКРЕТНЫЕ КОМПЛИМЕНТЫ
+    function isSecretUnlocked() {
+      const s = getStreakState();
+      return (s.streak || 0) >= 7 || (s.cycles || 0) >= 1;
+    }
+
+    function openSecret() {
+      const modal = document.getElementById('secretModal');
+      const tag = document.getElementById('secretTag');
+      const title = document.getElementById('secretTitle');
+      const desc = document.getElementById('secretDesc');
+
+      if (isSecretUnlocked()) {
+        const item = secretItems[Math.floor(Math.random() * secretItems.length)];
+        tag.innerText = 'Секретный архив • разблокировано';
+        title.innerText = '🔓 ' + item.lang;
+        desc.innerText = item.text;
+        confetti({ particleCount: 50, spread: 70, origin: { y: 0.5 }, colors: ['#e8c477', '#ffffff'] });
+      } else {
+        const s = getStreakState();
+        tag.innerText = 'Секретный архив • заблокировано';
+        title.innerText = '🔒 Ещё не открыто';
+        desc.innerText = `Открывается за 7 дней подряд (сейчас ${s.streak || 0}) или после того, как ты пройдёшь все 100 комплиментов по кругу.`;
+      }
+      modal.style.display = 'flex';
+    }
+
+    function closeSecret() {
+      document.getElementById('secretModal').style.display = 'none';
+    }
+
+    // 12. ФОНОВЫЕ ЧАСТИЦЫ
+    (function createBgParticles() {
+      const container = document.getElementById('bgParticles');
+      const symbols = ['✦', '✧', '·', '🤍'];
+      const count = 14;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'bg-particle';
+        p.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        p.style.left = `${Math.random() * 100}%`;
+        p.style.fontSize = `${8 + Math.random() * 14}px`;
+        const duration = 14 + Math.random() * 16;
+        const delay = Math.random() * duration;
+        p.style.animationDuration = `${duration}s`;
+        p.style.animationDelay = `-${delay}s`;
+        container.appendChild(p);
+      }
+    })();
 
     window.addEventListener('resize', () => {
       if (mode === 'scratch') initScratch();
