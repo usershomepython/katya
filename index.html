@@ -231,7 +231,7 @@
       font-weight: 600;
     }
 
-    /* КАРТОЧКА (ЭЛАСТИЧНАЯ ВЫСОТА) */
+    /* КАРТОЧКА */
     .card-frame {
       width: 100%;
       max-width: 420px;
@@ -264,12 +264,12 @@
 
     .card-quote {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.2rem, 4.2vw, 1.55rem);
+      font-size: clamp(1.15rem, 4vw, 1.48rem);
       line-height: 1.28;
       color: #ffffff;
       font-weight: 300;
       margin-bottom: 6px;
-      max-height: 55%;
+      max-height: 58%;
       overflow-y: auto;
       padding: 0 4px;
     }
@@ -316,7 +316,7 @@
       background: #1f1b12;
     }
 
-    /* КОМПАКТНАЯ НИЖНЯЯ ПАНЕЛЬ (ВСЕГО 2 СТРОКИ) */
+    /* НИЖНЯЯ ПАНЕЛЬ */
     .bottom-controls {
       width: 100%;
       max-width: 420px;
@@ -327,7 +327,6 @@
       flex-shrink: 0;
     }
 
-    /* 1-Я СТРОКА: ГЛАВНАЯ КНОПКА + МИНИ-КНОПКИ ОЗВУЧКИ И ШЕРА */
     .main-row {
       display: flex;
       gap: 6px;
@@ -372,11 +371,8 @@
       cursor: pointer;
       flex-shrink: 0;
     }
-    .btn-icon-sub:active {
-      border-color: #fff;
-    }
+    .btn-icon-sub:active { border-color: #fff; }
 
-    /* 2-Я СТРОКА: 3 КНОПКИ В ОДИН РЯД */
     .sub-row {
       display: grid;
       grid-template-columns: 1fr 1fr 1.2fr;
@@ -402,7 +398,7 @@
       color: #ffffff;
     }
 
-    /* СЕРДЕЧКО FAB */
+    /* FAB СЕРДЕЧКО */
     .reaction-fab {
       position: fixed;
       right: 14px;
@@ -691,16 +687,16 @@
 
   <!-- ЭКРАН ВХОДА -->
   <div id="gateScreen">
-    <div class="gate-brand">Annual Archive • 365 Days</div>
+    <div class="gate-brand">Annual Archive • Katia</div>
     <h1 class="gate-title">Katia</h1>
-    <p class="gate-sub">365 высказываний на каждый день года.<br>Лимит: строго до 3 комплиментов в день.</p>
+    <p class="gate-sub">Искренние высказывания на каждый день.<br>Лимит: строго до 3 комплиментов в день.</p>
     <button class="gate-btn" onclick="enterApp()">Войти в архив</button>
   </div>
 
   <!-- ШАПКА -->
   <header class="top-bar">
     <div class="stats-block">
-      <div class="status-counter" id="totalCounter">Открыто: 0 / 365</div>
+      <div class="status-counter" id="totalCounter">Открыто: 0 / ...</div>
       <div class="streak-badge" id="streakBadge">🔥 0 дней подряд</div>
     </div>
     <button class="sound-btn" id="soundToggle" onclick="toggleAudio()">
@@ -729,8 +725,8 @@
   <main class="card-frame" id="cardFrame">
     <canvas id="scratchCanvas"></canvas>
 
-    <div class="card-lang reveal-el" id="cardLang">Беларуская</div>
-    <div class="card-quote reveal-el" id="cardQuote">«...»</div>
+    <div class="card-lang reveal-el" id="cardLang">Русский</div>
+    <div class="card-quote reveal-el" id="cardQuote">«Загрузка архива...»</div>
     <div class="card-trans reveal-el" id="cardTrans"></div>
 
     <div class="today-tickets-bar" id="todayTabs"></div>
@@ -739,9 +735,8 @@
   <!-- СЕРДЕЧКО -->
   <div class="reaction-fab" id="fabBtn" onclick="spawnReaction(event)">🖤</div>
 
-  <!-- НИЖНЯЯ ПАНЕЛЬ (ВСЕГО 2 КОМПАКТНЫЕ СТРОКИ) -->
+  <!-- НИЖНЯЯ ПАНЕЛЬ -->
   <footer class="bottom-controls">
-    <!-- 1-я строка: Главная кнопка + Озвучка + Поделиться -->
     <div class="main-row">
       <button class="btn-main" id="mainActionBtn" onclick="handleAction()">
         Стереть новый билет
@@ -750,7 +745,6 @@
       <button class="btn-icon-sub" onclick="shareCompliment()" title="Поделиться">↗</button>
     </div>
 
-    <!-- 2-я строка: 3 кнопки в один аккуратный ряд -->
     <div class="sub-row">
       <button class="btn-sub" onclick="openManifest()">Манифест</button>
       <button class="btn-sub" onclick="openGallery()">Галерея</button>
@@ -823,89 +817,36 @@
     }
 
     /* ======================================================================
-       БАЗА НА 365 КОМПЛИМЕНТОВ
+       ЗАГРУЗКА ИЗ COMPLIMENTS.TXT (СТРОГО ПО ПОРЯДКУ)
     ====================================================================== */
-    const rawSeeds = [
-      { lang: "Беларуская", langCode: "be-BY", text: "Каця, твая дабрыня здольная сагрэць нават у самыя лютыя маразы.", trans: "Катя, твоя доброта способна согреть даже в самые лютые морозы." },
-      { lang: "Русский", langCode: "ru-RU", text: "Катюша, твоё чувство юмора — это чистое искусство. С тобой невозможно не смеяться.", trans: "" },
-      { lang: "Français", langCode: "fr-FR", text: "Katia, ton sourire est un rayon de soleil pour tous ceux qui t'entourent.", trans: "Катя, твоя улыбка — лучик солнца для всех вокруг." },
-      { lang: "Беларуская", langCode: "be-BY", text: "Твая шчырасць і натуральнасць — рэдкі і бясцэнны скарб.", trans: "Твоя искренность и естественность — редкое сокровище." },
-      { lang: "Italiano", langCode: "it-IT", text: "Hai un cuore d'oro e un'anima straordinariamente premurosa.", trans: "У тебя золотое сердце и необычайно заботливая душа." },
-      { lang: "Русский", langCode: "ru-RU", text: "Ты удивительно заботливая: ты всегда тонко чувствуешь, когда человеку нужна поддержка.", trans: "" },
-      { lang: "Español", langCode: "es-ES", text: "Katia, tu energía alegre llena cualquier habitación de luz y alegría.", trans: "Катя, твоя весёлая энергия наполняет всё вокруг светом." },
-      { lang: "Беларуская", langCode: "be-BY", text: "Побач з табой заўсёды так утульна, нібы вяртаешся дадому пасля доўгай вандроўкі.", trans: "Рядом с тобой всегда так уютно, будто возвращаешься домой." },
-      { lang: "English", langCode: "en-US", text: "You have that effortless charm and kindness that make people feel safe.", trans: "В тебе есть обаяние и доброта, рядом с которыми чувствуешь себя безопасно." },
-      { lang: "Русский", langCode: "ru-RU", text: "Я безумно ценю то, как ты умеешь слушать: не для ответа, а чтобы по-настоящему понять.", trans: "" },
-      { lang: "Deutsch", langCode: "de-DE", text: "Deine Herzlichkeit und Fürsorge sind ein wunderbares Geschenk für die Welt.", trans: "Твоя сердечность и забота — прекрасный подарок для этого мира." },
-      { lang: "Беларуская", langCode: "be-BY", text: "Каця, твой заразлівы смех — самы лепшы сродак ад любога суму.", trans: "Катя, твой заразительный смех — лучшее лекарство от любой грусти." },
-      { lang: "Українська", langCode: "uk-UA", text: "Катю, твоя щирість і світла душа надихають усіх навколо.", trans: "Катя, твоя искренность и светлая душа вдохновляют всех вокруг." },
-      { lang: "Русский", langCode: "ru-RU", text: "Ты умеешь превратить самый серый понедельник в тёплый и запоминающийся вечер.", trans: "" },
-      { lang: "Polski", langCode: "pl-PL", text: "Kasiu, twoja dobroć i poczucie humoru czynią cię kimś совершенно wyjątkowym.", trans: "Катя, твоя доброта и чувство юмора делают тебя исключительной." },
-      { lang: "Português", langCode: "pt-PT", text: "A tua presença traz calma, carinho e momentos inesquecíveis.", trans: "Твоё присутствие приносит спокойствие и нежность." },
-      { lang: "日本語", langCode: "ja-JP", text: "カチャ、あなたの優しさは星のように心を照らします。", trans: "Катя, твоя доброта, словно звёзды, озаряет сердце." },
-      { lang: "Беларуская", langCode: "be-BY", text: "У табе столькі святла і моцы, што ніякія хмары над галавой не страшныя.", trans: "В тебе столько света и силы, что никакие тучи не страшны." },
-      { lang: "Nederlands", langCode: "nl-NL", text: "Je hebt een prachtige ziel en een geweldig gevoel voor humor.", trans: "У тебя прекрасная душа и великолепное чувство юмора." },
-      { lang: "Русский", langCode: "ru-RU", text: "Ты верный и надёжный человек. Знать, что ты рядом — огромное счастье.", trans: "" },
-      { lang: "Беларуская", langCode: "be-BY", text: "Твае вочы свецяцца такой жыццёвай радасцю, што немагчыма не ўсміхнуцца ў адказ.", trans: "Твои глаза светятся радостью, невозможно не улыбнуться." },
-      { lang: "Svenska", langCode: "sv-SE", text: "Du sprider så mycket värme och omtanke omkring dig varje dag.", trans: "Ты распространяешь столько тепла и заботы вокруг себя каждый день." },
-      { lang: "Čeština", langCode: "cs-CZ", text: "Káťo, tvůj smích je neuvěřitelně nakažlivý a tvoje srdce plné lásky.", trans: "Катя, твой смех невероятно заразителен, а сердце полно любви." },
-      { lang: "Русский", langCode: "ru-RU", text: "Твоя интуиция и умение найти правильные слова в нужный момент всегда поражают.", trans: "" },
-      { lang: "Беларуская", langCode: "be-BY", text: "Дзякуй за тое, што ты заўсёды шчырая і сапраўдная, без фальшу.", trans: "Спасибо за то, что ты всегда искренняя и настоящая, без притворства." },
-      { lang: "한국어", langCode: "ko-KR", text: "카챠, 당신의 따뜻한 배려는 모두의 마음을 편안하게 만듭니다.", trans: "Катя, твоя тёплая забота дарит покой сердцам окружающих." },
-      { lang: "Türkçe", langCode: "tr-TR", text: "Senin gibi şefkatli, neşeli ve красивым kalbe sahip biri çok nadirdir.", trans: "Человек с таким добрым и весёлым сердцем — огромная редкость." },
-      { lang: "Русский", langCode: "ru-RU", text: "Катюша, с тобой даже обычная тишина ощущается невероятно уютно и спокойно.", trans: "" },
-      { lang: "ქართული", langCode: "ka-GE", text: "შენი სიკეთე და მხიარული სული ნამდვილი საჩუქარია.", trans: "Твоя доброта и весёлый дух — бесценный подарок." },
-      { lang: "Беларуская", langCode: "be-BY", text: "Каця, ты ўмееш разрадзіць любое напружанне адным толькі трапным словам.", trans: "Катя, ты умеешь разрядить любую обстановку одним метким словом." },
-      { lang: "Dansk", langCode: "da-DK", text: "Du bringer så meget hygge, glæde og varme ind i livet.", trans: "Ты приносишь в жизнь столько уюта, радости и душевного тепла." },
-      { lang: "Русский", langCode: "ru-RU", text: "Ты невероятно стойкая и мудрая, даже когда сама в себе сомневаешься.", trans: "" },
-      { lang: "Suomi", langCode: "fi-FI", text: "Lämpösi, hauskuutesi ja huolenpitosi tekevät sinusta korvaamattoman.", trans: "Твоё тепло, чувство юмора и забота делают тебя незаменимой." },
-      { lang: "Беларуская", langCode: "be-BY", text: "Твая пяшчота робіць гэты свет больш лагодным і бяспечным месцам.", trans: "Твоя нежность делает этот мир более добрым и безопасным местом." },
-      { lang: "Русский", langCode: "ru-RU", text: "Катя, твои голосовые сообщения — это отдельный вид терапии после тяжелого дня.", trans: "" },
-      { lang: "Latīna", langCode: "la", text: "Anima tua candida et iucunda lumen in tenebris est.", trans: "Твоя чистая и радостная душа — это свет во тьме." }
+    // Стартовый резерв на случай, если файла нет или запуск офлайн
+    let items = [
+      "Ты, Катенька, танцуешь так, будто никто не смотрит, и это восхитительно. Это не лесть, это факт.",
+      "Катюша, ты делаешь дружбу настоящим искусством, и это твоя суперспособность.",
+      "Знаешь, Катюха, ты умеешь превратить скучную поездку в весёлый квест, серьёзно.",
+      "Честно говоря, Катуся, ты тот человек, которому можно позвонить в три ночи."
     ];
 
-    const qualities = [
-      "неповторимую искренность", "чуткость к настроению других", "умение искренне радоваться",
-      "лучезарный взгляд", "способность поддержать без лишних нравоучений", "лёгкость в общении",
-      "глубокую мудрость", "неиссякаемый запас доброты", "уникальное чувство прекрасного",
-      "честность перед самой собой", "притягательную мягкость", "остроумные шутки"
-    ];
-    const details = [
-      "делает тебя незаменимой в жизни каждого, кому посчастливилось быть рядом.",
-      "всегда напоминает: в мире есть место настоящему теплу.",
-      "разгоняет любые сомнения и дарит ощущение защищённости.",
-      "превращает каждый прожитый день в маленькую историю.",
-      "вдохновляет становиться лучше и бережнее относиться к близким."
-    ];
-
-    const items = [...rawSeeds];
-    let qIdx = 0, dIdx = 0;
-    while (items.length < 365) {
-      const dayNum = items.length + 1;
-      const isBel = dayNum % 5 === 0;
-      if (isBel) {
-        items.push({
-          lang: "Беларуская",
-          langCode: "be-BY",
-          text: `Каця, тваё ўменне захаваць ${qualities[qIdx % qualities.length]} — гэта сапраўдны рэдкі скарб (Дзень #${dayNum}).`,
-          trans: `Катя, твоё умение сохранять это качество — настоящий редкий клад.`
-        });
-      } else {
-        items.push({
-          lang: "Русский",
-          langCode: "ru-RU",
-          text: `Катюша, твоя ${qualities[qIdx % qualities.length]} ${details[dIdx % details.length]}`,
-          trans: ""
-        });
+    async function loadComplimentsFile() {
+      try {
+        const response = await fetch('compliments.txt');
+        if (response.ok) {
+          const text = await response.text();
+          const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+          if (lines.length > 0) {
+            items = lines;
+          }
+        }
+      } catch (e) {
+        console.log("Загружен встроенный список");
       }
-      qIdx++;
-      dIdx++;
+      updateUIStats();
     }
 
     /* ======================================================================
-       СТРИК, ДНИ И ЛИМИТ (СТРОГО 3 В ДЕНЬ)
+       СТРИК, ДНИ И СТРОГИЙ ПОРЯДОК (СТРОГО 3 В ДЕНЬ)
     ====================================================================== */
-    const STORAGE_KEY = 'katia365_v6_iphone_fit';
+    const STORAGE_KEY = 'katia_txt_archive_v1';
 
     function getTodayString() {
       const now = new Date();
@@ -923,7 +864,8 @@
         streak: 0,
         openedTodayCount: 0,
         todayIndices: [],
-        seenIndices: []
+        currentIndex: 0, // Указатель на строку в compliments.txt
+        seenCount: 0
       };
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -948,6 +890,7 @@
         } else if (appState.lastDate === null) {
           appState.streak = 1;
         } else {
+          // ПРОПУСТИЛА ДЕНЬ — СЕРИЯ СГОРАЕТ
           appState.streak = 1;
           showToast("Серия сгорела из-за пропуска, но сегодня новый старт! 🔥");
         }
@@ -961,7 +904,7 @@
     }
 
     function updateUIStats() {
-      document.getElementById('totalCounter').innerText = `Открыто: ${appState.seenIndices.length} / ${items.length}`;
+      document.getElementById('totalCounter').innerText = `Открыто: ${appState.seenCount || 0} / ${items.length}`;
       document.getElementById('streakBadge').innerText = `🔥 ${appState.streak} ${formatDayWord(appState.streak)}`;
       document.getElementById('limitLabel').innerText = `Сегодня открыто: ${appState.openedTodayCount} из 3`;
 
@@ -1072,21 +1015,20 @@
 
     function renderItem(idx, withScratch = true) {
       currentIdx = idx;
-      const item = items[idx];
+      const text = items[idx] || "Комплимент открыт";
       const elLang = document.getElementById('cardLang');
       const elQuote = document.getElementById('cardQuote');
       const elTrans = document.getElementById('cardTrans');
 
       [elLang, elQuote, elTrans].forEach(el => el.classList.remove('in'));
 
-      elLang.innerText = item.lang;
-      elQuote.innerText = `«${item.text}»`;
-      elTrans.innerText = item.trans || "";
+      elLang.innerText = `Послание #${idx + 1}`;
+      elQuote.innerText = `«${text}»`;
+      elTrans.innerText = "";
 
       requestAnimationFrame(() => {
         setTimeout(() => elLang.classList.add('in'), 50);
         setTimeout(() => elQuote.classList.add('in'), 150);
-        setTimeout(() => elTrans.classList.add('in'), 280);
       });
 
       if (mode === 'scratch' && withScratch) initScratch();
@@ -1104,7 +1046,7 @@
     }
 
     /* ======================================================================
-       ОТКРЫТИЕ (ЛИМИТ 3)
+       ВЫДАЧА КОМПЛИМЕНТОВ СТРОГО ПО ПОРЯДКУ
     ====================================================================== */
     let isRouletteSpinning = false;
 
@@ -1130,9 +1072,8 @@
         let ticks = 0;
         const timer = setInterval(() => {
           const rand = Math.floor(Math.random() * items.length);
-          document.getElementById('cardLang').innerText = items[rand].lang;
+          document.getElementById('cardLang').innerText = "Архив";
           document.getElementById('cardQuote').innerText = "Крутим рулетку...";
-          document.getElementById('cardTrans').innerText = "";
           ticks++;
           if (ticks > 12) {
             clearInterval(timer);
@@ -1146,15 +1087,17 @@
       grantNewCompliment(true);
     }
 
+    // Берёт следующую строку СТРОГО ПО ПОРЯДКУ
     function grantNewCompliment(withScratch) {
-      let nextIndex = 0;
-      const unseen = items.map((_, i) => i).filter(i => !appState.seenIndices.includes(i));
-      if (unseen.length > 0) nextIndex = unseen[Math.floor(Math.random() * unseen.length)];
-      else nextIndex = Math.floor(Math.random() * items.length);
+      if (appState.currentIndex >= items.length) {
+        appState.currentIndex = 0; // Если дошла до самого конца — начинает новый круг
+      }
 
-      appState.openedTodayCount += 1;
+      const nextIndex = appState.currentIndex;
+      appState.currentIndex++;
+      appState.openedTodayCount++;
       appState.todayIndices.push(nextIndex);
-      if (!appState.seenIndices.includes(nextIndex)) appState.seenIndices.push(nextIndex);
+      appState.seenCount = Math.min(items.length, (appState.seenCount || 0) + 1);
       saveAppData(appState);
       selectedTodayIndex = appState.todayIndices.length - 1;
 
@@ -1238,7 +1181,7 @@
     }
 
     /* ======================================================================
-       СЕКРЕТ (СТРОГО 31 ДЕНЬ ПОДРЯД ИЛИ ВСЕ 365)
+       СЕКРЕТ (СТРОГО 31 ДЕНЬ ПОДРЯД ИЛИ ВСЕ КОМПЛИМЕНТЫ)
     ====================================================================== */
     function openSecret() {
       const modal = document.getElementById('modalWindow');
@@ -1247,7 +1190,7 @@
       const desc = document.getElementById('modalDesc');
 
       const isStreakReached = appState.streak >= 31;
-      const isAllSeen = appState.seenIndices.length >= items.length;
+      const isAllSeen = (appState.seenCount || 0) >= items.length;
 
       if (isStreakReached || isAllSeen) {
         tag.innerText = "Секретный архив • Разблокировано";
@@ -1259,7 +1202,7 @@
         tag.innerText = "Секретный архив • Заблокировано";
         title.innerText = "🔒 Доступ закрыт";
         desc.innerText = 
-          `Чтобы открыть этот секрет, нужно:\n— Либо заходить 31 день подряд (сейчас: ${appState.streak} / 31);\n— Либо открыть все комплименты архива (сейчас: ${appState.seenIndices.length} / 365).\n\nНе пропускай дни, иначе серия сгорает!`;
+          `Чтобы открыть этот секрет, нужно:\n— Либо заходить 31 день подряд (сейчас: ${appState.streak} / 31);\n— Либо открыть весь архив комплиментов (сейчас: ${appState.seenCount || 0} / ${items.length}).\n\nНе пропускай дни, иначе серия сгорает!`;
       }
       modal.style.display = 'flex';
     }
@@ -1289,7 +1232,7 @@
     const bgAudio = document.getElementById('bgAudio');
     const soundToggle = document.getElementById('soundToggle');
 
-    function enterApp() {
+    async function enterApp() {
       const gate = document.getElementById('gateScreen');
       gate.style.opacity = '0';
       setTimeout(() => { gate.style.visibility = 'hidden'; }, 500);
@@ -1301,13 +1244,14 @@
         soundToggle.innerText = "Sound: On";
       }).catch(() => {});
 
+      await loadComplimentsFile();
       checkAndInitDay();
 
       if (appState.todayIndices.length > 0) {
         selectedTodayIndex = appState.todayIndices.length - 1;
         renderItem(appState.todayIndices[selectedTodayIndex], false);
       } else {
-        renderItem(0, true);
+        renderItem(appState.currentIndex, true);
       }
     }
 
@@ -1326,17 +1270,16 @@
     function speakCompliment() {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const item = items[currentIdx];
-        const u = new SpeechSynthesisUtterance(item.text);
-        u.lang = item.langCode || 'ru-RU';
+        const text = items[currentIdx] || "";
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ru-RU';
         u.rate = 0.9;
         window.speechSynthesis.speak(u);
       }
     }
 
     function shareCompliment() {
-      const it = items[currentIdx];
-      const text = `«${it.text}»${it.trans ? '\n' + it.trans : ''}\n\n— послание для Кати 🤍`;
+      const text = `«${items[currentIdx] || ""}»\n\n— послание для Кати 🤍`;
       if (navigator.share) navigator.share({ text }).catch(() => {});
       else if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => showToast('Текст скопирован ✓'));
@@ -1354,23 +1297,24 @@
       document.getElementById('modalTag').innerText = "Официальный манифест";
       document.getElementById('modalTitle').innerText = "Архив Кати";
       document.getElementById('modalDesc').innerText = 
-        "Каждый из этих 365 комплиментов зафиксирован в знак признания твоей доброты, чувства юмора и душевного тепла.";
+        "Каждое из этих посланий сохранено в знак признания твоей доброты, чувства юмора и душевного тепла.";
       document.getElementById('modalWindow').style.display = 'flex';
     }
 
     function openGallery() {
       const list = document.getElementById('galleryList');
       list.innerHTML = '';
-      if (appState.seenIndices.length === 0) {
+      const totalSeen = appState.currentIndex || 0;
+
+      if (totalSeen === 0) {
         list.innerHTML = '<div style="color:#777; text-align:center; padding:30px;">Пока пусто. Открой свой первый билет!</div>';
       } else {
-        appState.seenIndices.forEach(idx => {
-          const it = items[idx];
+        for (let i = 0; i < totalSeen; i++) {
           const div = document.createElement('div');
           div.className = 'gallery-item';
-          div.innerHTML = `<div class="g-lang">${it.lang}</div><div class="g-text">«${it.text}»</div>`;
+          div.innerHTML = `<div class="g-lang">Послание #${i + 1}</div><div class="g-text">«${items[i]}»</div>`;
           list.appendChild(div);
-        });
+        }
       }
       document.getElementById('galleryModal').style.display = 'flex';
     }
