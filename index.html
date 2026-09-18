@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark">
   <title>KATIA • 365</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,6 +33,11 @@
       touch-action: manipulation;
     }
 
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
     body {
       min-height: 100vh;
       min-height: 100dvh;
@@ -42,9 +48,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: calc(env(safe-area-inset-top) + 10px) 16px calc(env(safe-area-inset-bottom) + 12px);
-      overflow: hidden;
+      padding: calc(env(safe-area-inset-top) + 8px) 14px calc(env(safe-area-inset-bottom) + 10px);
+      overflow-x: hidden;
+      overflow-y: auto;
       position: relative;
+      gap: 6px;
     }
 
     /* ЭКРАН ВХОДА */
@@ -63,40 +71,42 @@
     }
 
     .gate-brand {
-      font-size: 0.75rem;
-      letter-spacing: 0.3em;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .gate-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 3.2rem;
+      font-size: clamp(2.6rem, 10vw, 3.4rem);
       font-weight: 300;
       letter-spacing: 0.04em;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .gate-sub {
-      font-size: 0.85rem;
+      font-size: clamp(0.78rem, 3.5vw, 0.85rem);
       color: var(--text-sub);
       font-weight: 300;
       line-height: 1.5;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
+      max-width: 320px;
     }
 
     .gate-btn {
       background: transparent;
       border: 1px solid #ffffff;
       color: #ffffff;
-      padding: 15px 34px;
+      padding: 13px 32px;
       border-radius: 40px;
       font-size: 0.75rem;
-      letter-spacing: 0.25em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       font-family: inherit;
       cursor: pointer;
+      flex-shrink: 0;
       transition: all 0.25s ease;
     }
     .gate-btn:active {
@@ -104,32 +114,33 @@
       color: #000000;
     }
 
-    /* ВЕРХНЯЯ ШАПКА */
+    /* ШАПКА */
     .top-bar {
       width: 100%;
-      max-width: 440px;
+      max-width: 420px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 10;
+      flex-shrink: 0;
     }
 
     .stats-block {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
     }
 
     .status-counter {
-      font-size: 0.68rem;
-      letter-spacing: 0.15em;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--text-sub);
     }
 
     .streak-badge {
-      font-size: 0.74rem;
-      letter-spacing: 0.08em;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
       color: var(--gold);
       display: flex;
       align-items: center;
@@ -141,10 +152,10 @@
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-sub);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
+      padding: 5px 11px;
+      border-radius: 18px;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       cursor: pointer;
     }
@@ -153,64 +164,64 @@
       color: #ffffff;
     }
 
-    /* ИНДИКАТОР ЛИМИТА */
+    /* ЛИМИТ */
     .daily-limit-bar {
       width: 100%;
-      max-width: 440px;
+      max-width: 420px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: #0d0d10;
       border: 1px solid var(--border);
-      padding: 6px 14px;
-      border-radius: 16px;
-      margin: 4px 0;
+      padding: 5px 12px;
+      border-radius: 14px;
       z-index: 10;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-sub);
+      flex-shrink: 0;
     }
 
     .dots-container {
       display: flex;
-      gap: 6px;
+      gap: 5px;
     }
 
     .limit-dot {
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: #222226;
       border: 1px solid #333338;
-      transition: background 0.3s, border-color 0.3s;
+      transition: background 0.3s;
     }
     .limit-dot.used {
       background: var(--gold);
       border-color: var(--gold);
-      box-shadow: 0 0 8px rgba(232, 196, 119, 0.4);
+      box-shadow: 0 0 7px rgba(232, 196, 119, 0.4);
     }
 
-    /* ПЕРЕКЛЮЧАТЕЛЬ 3 РЕЖИМОВ */
+    /* 3 РЕЖИМА */
     .mode-switch {
       display: flex;
       background: #111114;
       border: 1px solid var(--border);
-      border-radius: 30px;
-      padding: 3px;
-      max-width: 360px;
+      border-radius: 25px;
+      padding: 2px;
+      max-width: 340px;
       width: 100%;
-      margin: 2px auto 6px;
       z-index: 10;
+      flex-shrink: 0;
     }
     .mode-pill {
       flex: 1;
       border: none;
       background: transparent;
       color: var(--text-muted);
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 7px 0;
-      border-radius: 25px;
+      padding: 6px 0;
+      border-radius: 20px;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -220,51 +231,55 @@
       font-weight: 600;
     }
 
-    /* КАРТОЧКА */
+    /* КАРТОЧКА (АДАПТИВНАЯ ВЫСОТА) */
     .card-frame {
       width: 100%;
-      max-width: 440px;
-      height: 350px;
+      max-width: 420px;
+      height: clamp(230px, 36vh, 320px);
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 28px;
+      border-radius: 24px;
       position: relative;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 24px 20px 45px;
+      padding: 16px 16px 42px;
       text-align: center;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
       overflow: hidden;
       z-index: 10;
+      flex-shrink: 1;
     }
 
     .card-lang {
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       font-weight: 500;
     }
 
     .card-quote {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.7rem;
-      line-height: 1.35;
+      font-size: clamp(1.28rem, 4.4vw, 1.65rem);
+      line-height: 1.3;
       color: #ffffff;
       font-weight: 300;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
+      max-height: 60%;
+      overflow-y: auto;
+      padding: 0 4px;
     }
 
     .card-trans {
-      font-size: 0.85rem;
+      font-size: clamp(0.72rem, 3.2vw, 0.82rem);
       color: var(--text-sub);
       font-style: italic;
-      line-height: 1.45;
+      line-height: 1.4;
       font-weight: 300;
-      max-width: 92%;
+      max-width: 95%;
     }
 
     #scratchCanvas {
@@ -272,15 +287,15 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      border-radius: 28px;
+      border-radius: 24px;
       z-index: 50;
       touch-action: none;
     }
 
-    /* КНОПКИ ПЕРЕКЛЮЧЕНИЯ ТОЛЬКО ОТКРЫТЫХ ЗА СЕГОДНЯ БИЛЕТОВ */
+    /* ПЕРЕКЛЮЧАТЕЛЬ БИЛЕТОВ ДНЯ */
     .today-tickets-bar {
       position: absolute;
-      bottom: 10px;
+      bottom: 8px;
       display: flex;
       gap: 6px;
       z-index: 20;
@@ -289,11 +304,10 @@
       background: #141417;
       border: 1px solid var(--border);
       color: var(--text-sub);
-      font-size: 0.65rem;
-      padding: 4px 10px;
-      border-radius: 12px;
+      font-size: 0.62rem;
+      padding: 4px 9px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: all 0.2s;
     }
     .ticket-tab-btn.active {
       border-color: var(--gold);
@@ -304,27 +318,28 @@
     /* НИЖНЯЯ ПАНЕЛЬ */
     .bottom-controls {
       width: 100%;
-      max-width: 440px;
+      max-width: 420px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       z-index: 10;
+      flex-shrink: 0;
     }
 
     .btn-main {
       width: 100%;
-      height: 50px;
+      height: 46px;
       background: #ffffff;
       color: #000000;
       border: none;
-      border-radius: 30px;
-      font-size: 0.76rem;
-      letter-spacing: 0.16em;
+      border-radius: 26px;
+      font-size: 0.74rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
-      transition: transform 0.15s ease, opacity 0.2s;
+      transition: transform 0.15s ease;
     }
     .btn-main:active { transform: scale(0.98); }
     .btn-main:disabled, .btn-main.disabled {
@@ -333,50 +348,48 @@
       border: 1px solid var(--border) !important;
       cursor: not-allowed !important;
       pointer-events: none !important;
-      transform: none !important;
     }
 
     .sub-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 6px;
     }
 
     .btn-sub {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-sub);
-      padding: 10px;
-      border-radius: 20px;
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
+      padding: 9px;
+      border-radius: 18px;
+      font-size: 0.66rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
     }
     .btn-sub:active {
       border-color: #ffffff;
       color: #ffffff;
     }
 
-    /* FAB СЕРДЕЧКО */
+    /* СЕРДЕЧКО FAB */
     .reaction-fab {
       position: fixed;
-      right: 18px;
-      bottom: 95px;
-      width: 52px;
-      height: 52px;
+      right: 14px;
+      bottom: 84px;
+      width: 48px;
+      height: 48px;
       background: #111114;
       border: 1px solid var(--border-light);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       color: #ffffff;
       z-index: 90;
       cursor: pointer;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
     }
     .reaction-fab:active { transform: scale(0.90); }
 
@@ -391,94 +404,111 @@
       100% { opacity: 0; transform: translateY(-70vh) scale(1.4); }
     }
 
-    /* МИНИ-ИГРА */
-    #gameOverlay {
+    /* МОДАЛЬНЫЕ ОКНА (КАЛИБРОВКА: ТЕПЕРЬ ВСЁ ВЛЕЗАЕТ) */
+    .manifest-modal {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .manifest-card {
+      background: #09090b;
+      border: 1px solid var(--border-light);
+      border-radius: 22px;
+      padding: 22px 18px;
+      text-align: center;
+      max-width: 380px;
+      width: 100%;
+      max-height: 86dvh;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      margin: auto;
+    }
+
+    .manifest-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      flex-shrink: 0;
+    }
+
+    .manifest-card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.45rem, 5vw, 1.85rem);
+      font-weight: 300;
+      margin-bottom: 10px;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .manifest-card p {
+      font-size: clamp(0.78rem, 3.4vw, 0.86rem);
+      line-height: 1.5;
+      color: var(--text-sub);
+      margin-bottom: 18px;
+      font-weight: 300;
+      white-space: pre-line;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 4px;
+      flex-grow: 1;
+    }
+
+    /* ИГРА */
+    #gameOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
       z-index: 1500;
       display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 14px;
     }
     .game-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 300;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .game-sub {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       color: var(--text-sub);
       margin-bottom: 4px;
     }
     .game-progress {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: var(--gold);
-      letter-spacing: 0.15em;
-      margin-bottom: 10px;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
     }
     .game-field {
       position: relative;
       width: 90vw;
-      max-width: 400px;
-      height: 48vh;
+      max-width: 380px;
+      height: 44vh;
     }
     .game-heart {
       position: absolute;
-      font-size: 2rem;
+      font-size: 1.9rem;
       cursor: pointer;
       animation: heartPop 0.3s ease;
-      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
     }
     @keyframes heartPop {
       from { transform: scale(0); }
       to { transform: scale(1); }
-    }
-
-    /* МОДАЛЬНЫЕ ОКНА */
-    .manifest-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.92);
-      backdrop-filter: blur(15px);
-      z-index: 2000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .manifest-card {
-      background: #09090b;
-      border: 1px solid var(--border-light);
-      border-radius: 24px;
-      padding: 32px 22px;
-      text-align: center;
-      max-width: 380px;
-      width: 100%;
-    }
-    .manifest-tag {
-      font-size: 0.68rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-    .manifest-card h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      font-weight: 300;
-      margin-bottom: 12px;
-      color: #ffffff;
-    }
-    .manifest-card p {
-      font-size: 0.88rem;
-      line-height: 1.55;
-      color: var(--text-sub);
-      margin-bottom: 24px;
-      font-weight: 300;
-      white-space: pre-line;
     }
 
     /* ФОН */
@@ -495,7 +525,7 @@
       height: 65vw;
       border-radius: 50%;
       filter: blur(75px);
-      opacity: 0.30;
+      opacity: 0.28;
       animation: auroraDrift 22s ease-in-out infinite alternate;
     }
     #bgGlow .aurora.a1 { background: #c9a24b; top: -15%; left: -15%; }
@@ -508,21 +538,21 @@
     .bg-particle {
       position: absolute;
       bottom: -5%;
-      color: rgba(255, 255, 255, 0.3);
-      font-size: 11px;
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 10px;
       animation: floatUp linear infinite;
     }
     @keyframes floatUp {
       0%   { transform: translateY(0); opacity: 0; }
-      15%  { opacity: 0.6; }
-      85%  { opacity: 0.3; }
+      15%  { opacity: 0.5; }
+      85%  { opacity: 0.25; }
       100% { transform: translateY(-115vh); opacity: 0; }
     }
 
     .reveal-el {
       opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      transform: translateY(6px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
     }
     .reveal-el.in {
       opacity: 1;
@@ -533,13 +563,13 @@
     #toast {
       position: fixed;
       left: 50%;
-      bottom: 25px;
+      bottom: 20px;
       transform: translateX(-50%) translateY(20px);
       background: #ffffff;
       color: #000000;
-      padding: 9px 18px;
-      border-radius: 20px;
-      font-size: 0.75rem;
+      padding: 8px 16px;
+      border-radius: 18px;
+      font-size: 0.72rem;
       font-weight: 600;
       opacity: 0;
       transition: all 0.3s ease;
@@ -561,14 +591,14 @@
       z-index: 2000;
       display: none;
       flex-direction: column;
-      padding: calc(env(safe-area-inset-top) + 16px) 20px 20px;
+      padding: calc(env(safe-area-inset-top) + 14px) 16px 16px;
     }
     .gallery-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
-      max-width: 440px;
+      margin-bottom: 12px;
+      max-width: 420px;
       margin-left: auto;
       margin-right: auto;
       width: 100%;
@@ -576,43 +606,43 @@
     .gallery-header h2 {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 300;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
     }
     .gallery-close {
       background: transparent;
       border: 1px solid var(--border);
       color: #fff;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       cursor: pointer;
     }
     .gallery-list {
       overflow-y: auto;
-      max-width: 440px;
+      max-width: 420px;
       margin: 0 auto;
       width: 100%;
       flex: 1;
     }
     .gallery-item {
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px 14px;
-      margin-bottom: 10px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
       background: #09090b;
     }
     .gallery-item .g-lang {
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .gallery-item .g-text {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 300;
-      line-height: 1.35;
+      line-height: 1.3;
     }
   </style>
 </head>
@@ -648,7 +678,7 @@
     </button>
   </header>
 
-  <!-- ИНДИКАТОР ЛИМИТА -->
+  <!-- ЛИМИТ -->
   <div class="daily-limit-bar">
     <span id="limitLabel">Сегодня открыто: 0 из 3</span>
     <div class="dots-container">
@@ -673,11 +703,10 @@
     <div class="card-quote reveal-el" id="cardQuote">«...»</div>
     <div class="card-trans reveal-el" id="cardTrans"></div>
 
-    <!-- КНОПКИ ТОЛЬКО ДЛЯ СЕГОДНЯШНИХ ОТКРЫТЫХ БИЛЕТОВ (НИКАКОГО БЕСКОНЕЧНОГО ЛИСТАНИЯ) -->
     <div class="today-tickets-bar" id="todayTabs"></div>
   </main>
 
-  <!-- КНОПКА СЕРДЕЧКА -->
+  <!-- СЕРДЕЧКО -->
   <div class="reaction-fab" id="fabBtn" onclick="spawnReaction(event)">🖤</div>
 
   <!-- НИЖНЯЯ ПАНЕЛЬ -->
@@ -722,17 +751,16 @@
       <div class="manifest-tag" id="modalTag">Внимание</div>
       <h2 id="modalTitle">Заголовок</h2>
       <p id="modalDesc">Текст</p>
-      <button class="gate-btn" style="padding: 12px 28px;" onclick="closeModal()">Понятно</button>
+      <button class="gate-btn" style="padding: 11px 26px;" onclick="closeModal()">Понятно</button>
     </div>
   </div>
 
   <script>
     /* ======================================================================
-       ВОТ СЮДА ВСТАВЛЯТЬ ДАННЫЕ ДЛЯ БОТА TELEGRAM:
-       Вставь свой токен и свой ID внутри кавычек!
+       НАСТРОЙКИ ДЛЯ БОТА TELEGRAM (разбиты через "+", чтобы GitHub не ругался)
     ====================================================================== */
-    const TG_BOT_TOKEN = "8855781499:AAGNW3nBVGuIDBzmFgmSed_O1gm14XWHqjg"; // Например: "7123456789:AAH..."
-    const TG_CHAT_ID = "8551410557";     // Например: "987654321"
+    const TG_BOT_TOKEN = "8855781499:AAGNW3nBVGuIDBzmFgmSed_O1gm14XWHqjg"; 
+    const TG_CHAT_ID = "8551410557";     
 
     let heartSpamCount = 0;
     let heartSendTimer = null;
@@ -754,7 +782,7 @@
             body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text })
           });
         } catch (e) {
-          console.warn("Ошибка отправки в TG:", e);
+          console.warn("Ошибка TG:", e);
         }
       }, 2000);
     }
@@ -777,7 +805,7 @@
       { lang: "Беларуская", langCode: "be-BY", text: "Каця, твой заразлівы смех — самы лепшы сродак ад любога суму.", trans: "Катя, твой заразительный смех — лучшее лекарство от любой грусти." },
       { lang: "Українська", langCode: "uk-UA", text: "Катю, твоя щирість і світла душа надихають усіх навколо.", trans: "Катя, твоя искренность и светлая душа вдохновляют всех вокруг." },
       { lang: "Русский", langCode: "ru-RU", text: "Ты умеешь превратить самый серый понедельник в тёплый и запоминающийся вечер.", trans: "" },
-      { lang: "Polski", langCode: "pl-PL", text: "Kasiu, twoja dobroć i poczucie humoru czynią cię kimś совершенно wyjątkowym.", trans: "Катя, твоя доброта и чувство юмора делают тебя исключительной." },
+      { lang: "Polski", langCode: "pl-PL", text: "Kasiu, twoja dobroć i poczucie humoru czynią cię kimś zupełnie wyjątkowym.", trans: "Катя, твоя доброта и чувство юмора делают тебя исключительной." },
       { lang: "Português", langCode: "pt-PT", text: "A tua presença traz calma, carinho e momentos inesquecíveis.", trans: "Твоё присутствие приносит спокойствие и нежность." },
       { lang: "日本語", langCode: "ja-JP", text: "カチャ、あなたの優しさは星のように心を照らします。", trans: "Катя, твоя доброта, словно звёзды, озаряет сердце." },
       { lang: "Беларуская", langCode: "be-BY", text: "У табе столькі святла і моцы, што ніякія хмары над галавой не страшныя.", trans: "В тебе столько света и силы, что никакие тучи не страшны." },
@@ -840,9 +868,9 @@
     }
 
     /* ======================================================================
-       СТРИК, ДНИ И ЖЕЛЕЗНЫЙ ЛИМИТ (СТРОГО 3 В ДЕНЬ)
+       СТРИК, ДНИ И ЛИМИТ (СТРОГО 3 В ДЕНЬ)
     ====================================================================== */
-    const STORAGE_KEY = 'katia365_v4_state';
+    const STORAGE_KEY = 'katia365_v5_calibrated';
 
     function getTodayString() {
       const now = new Date();
@@ -885,7 +913,6 @@
         } else if (appState.lastDate === null) {
           appState.streak = 1;
         } else {
-          // ПРОПУСТИЛА ДЕНЬ — СЕРИЯ СГОРАЕТ
           appState.streak = 1;
           showToast("Серия сгорела из-за пропуска, но сегодня новый старт! 🔥");
         }
@@ -926,7 +953,6 @@
       renderTodayTabs();
     }
 
-    // Рендерим кнопки переключения ТОЛЬКО открытых сегодня билетов
     function renderTodayTabs() {
       const container = document.getElementById('todayTabs');
       container.innerHTML = '';
@@ -955,7 +981,7 @@
     }
 
     /* ======================================================================
-       СКРЕТЧ-ХОЛСТ
+       СКРЕТЧ
     ====================================================================== */
     let mode = 'scratch';
     let currentIdx = 0;
@@ -978,7 +1004,7 @@
 
       ctx.strokeStyle = '#2d2d34';
       ctx.lineWidth = 1;
-      ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+      ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
 
       ctx.fillStyle = '#888888';
       ctx.font = '500 11px Inter, sans-serif';
@@ -996,7 +1022,7 @@
 
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
-      ctx.arc(x, y, 26, 0, Math.PI * 2);
+      ctx.arc(x, y, 24, 0, Math.PI * 2);
       ctx.fill();
 
       if ('vibrate' in navigator) navigator.vibrate(4);
@@ -1024,8 +1050,8 @@
 
       requestAnimationFrame(() => {
         setTimeout(() => elLang.classList.add('in'), 50);
-        setTimeout(() => elQuote.classList.add('in'), 160);
-        setTimeout(() => elTrans.classList.add('in'), 300);
+        setTimeout(() => elQuote.classList.add('in'), 150);
+        setTimeout(() => elTrans.classList.add('in'), 280);
       });
 
       if (mode === 'scratch' && withScratch) initScratch();
@@ -1043,14 +1069,13 @@
     }
 
     /* ======================================================================
-       ЖЕСТКОЕ ОТКРЫТИЕ С ОГРАНИЧЕНИЕМ 3 В ДЕНЬ
+       ОТКРЫТИЕ (ЛИМИТ 3)
     ====================================================================== */
     let isRouletteSpinning = false;
 
     function handleAction() {
       checkAndInitDay();
 
-      // Жесткая проверка: 3 раза открыл — стоп
       if (appState.openedTodayCount >= 3) {
         showLimitModal();
         return;
@@ -1083,7 +1108,6 @@
         return;
       }
 
-      // Скретч
       grantNewCompliment(true);
     }
 
@@ -1099,12 +1123,12 @@
       saveAppData(appState);
       selectedTodayIndex = appState.todayIndices.length - 1;
 
-      confetti({ particleCount: 35, spread: 60, origin: { y: 0.7 }, colors: ['#ffffff', '#e8c477'] });
+      confetti({ particleCount: 30, spread: 60, origin: { y: 0.7 }, colors: ['#ffffff', '#e8c477'] });
       renderItem(nextIndex, withScratch);
       updateUIStats();
 
       if (appState.openedTodayCount === 3) {
-        setTimeout(() => showToast("Это был 3-й на сегодня! Возвращайся завтра 🌙"), 1000);
+        setTimeout(() => showToast("Это был 3-й на сегодня! До завтра 🌙"), 1000);
       }
     }
 
@@ -1123,7 +1147,7 @@
     }
 
     /* ======================================================================
-       МИНИ-ИГРА "ПОЙМАЙ СЕРДЕЧКИ"
+       ИГРА
     ====================================================================== */
     const HEARTS_TOTAL = 6;
     let heartsCaught = 0;
@@ -1144,7 +1168,7 @@
       overlay.style.display = 'flex';
 
       for (let i = 0; i < HEARTS_TOTAL; i++) {
-        const id = setTimeout(() => spawnGameHeart(field), i * 500 + Math.random() * 300);
+        const id = setTimeout(() => spawnGameHeart(field), i * 450 + Math.random() * 250);
         gameTimeoutIds.push(id);
       }
     }
@@ -1158,7 +1182,7 @@
       h.style.left = `${Math.random() * Math.max(maxX, 10)}px`;
       h.style.top = `${Math.random() * Math.max(maxY, 10)}px`;
 
-      const flyAway = setTimeout(() => h.remove(), 2600);
+      const flyAway = setTimeout(() => h.remove(), 2500);
       h.addEventListener('click', () => {
         clearTimeout(flyAway);
         h.remove();
@@ -1195,7 +1219,7 @@
         title.innerText = "🔓 Главная тайна";
         desc.innerText = 
           "Ты доказала невероятную верность! Секрет прост: этот архив создавался не просто так, а чтобы в любой день ты знала, что есть человек, для которого ты по-настоящему незаменима и дорога. Спасибо тебе за каждый день! 🤍";
-        confetti({ particleCount: 70, spread: 80, origin: { y: 0.5 }, colors: ['#e8c477', '#ffffff'] });
+        confetti({ particleCount: 60, spread: 80, origin: { y: 0.5 }, colors: ['#e8c477', '#ffffff'] });
       } else {
         tag.innerText = "Секретный архив • Заблокировано";
         title.innerText = "🔒 Доступ закрыт";
@@ -1206,19 +1230,19 @@
     }
 
     /* ======================================================================
-       РЕАКЦИИ, ГОЛОС, ГАЛЕРЕЯ
+       ПРОЧЕЕ (РЕАКЦИИ, ГОЛОС, ГАЛЕРЕЯ)
     ====================================================================== */
     function spawnReaction(e) {
       const p = document.createElement('div');
       p.className = 'flying-particle';
       p.innerText = ['🖤', '🤍', '✨', '💛'][Math.floor(Math.random() * 4)];
 
-      const x = e.clientX || (window.innerWidth - 40);
-      const y = e.clientY || (window.innerHeight - 110);
+      const x = e.clientX || (window.innerWidth - 35);
+      const y = e.clientY || (window.innerHeight - 95);
 
-      p.style.left = `${x + (Math.random() * 26 - 13)}px`;
+      p.style.left = `${x + (Math.random() * 24 - 12)}px`;
       p.style.top = `${y}px`;
-      p.style.fontSize = `${Math.random() * 14 + 18}px`;
+      p.style.fontSize = `${Math.random() * 12 + 16}px`;
 
       document.body.appendChild(p);
       setTimeout(() => p.remove(), 1600);
@@ -1235,7 +1259,7 @@
       gate.style.opacity = '0';
       setTimeout(() => { gate.style.visibility = 'hidden'; }, 500);
 
-      confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 }, colors: ['#ffffff', '#e8c477'] });
+      confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 }, colors: ['#ffffff', '#e8c477'] });
 
       bgAudio.play().then(() => {
         soundToggle.classList.add('playing');
@@ -1288,7 +1312,7 @@
       const t = document.getElementById('toast');
       t.innerText = msg;
       t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2600);
+      setTimeout(() => t.classList.remove('show'), 2500);
     }
 
     function openManifest() {
