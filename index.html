@@ -39,8 +39,9 @@
     }
 
     body {
-      min-height: 100vh;
-      min-height: 100dvh;
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100dvh;
       background-color: var(--bg);
       font-family: 'Inter', sans-serif;
       color: var(--text);
@@ -48,9 +49,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: calc(env(safe-area-inset-top) + 8px) 14px calc(env(safe-area-inset-bottom) + 10px);
-      overflow-x: hidden;
-      overflow-y: auto;
+      padding: calc(env(safe-area-inset-top) + 6px) 14px max(calc(env(safe-area-inset-bottom) + 12px), 20px);
+      overflow: hidden;
       position: relative;
       gap: 6px;
     }
@@ -152,9 +152,9 @@
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-sub);
-      padding: 5px 11px;
+      padding: 4px 10px;
       border-radius: 18px;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       cursor: pointer;
@@ -174,9 +174,9 @@
       background: #0d0d10;
       border: 1px solid var(--border);
       padding: 5px 12px;
-      border-radius: 14px;
+      border-radius: 12px;
       z-index: 10;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: var(--text-sub);
       flex-shrink: 0;
     }
@@ -220,7 +220,7 @@
       font-size: 0.65rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 6px 0;
+      padding: 5px 0;
       border-radius: 20px;
       cursor: pointer;
       transition: all 0.2s;
@@ -231,53 +231,54 @@
       font-weight: 600;
     }
 
-    /* КАРТОЧКА (АДАПТИВНАЯ ВЫСОТА) */
+    /* КАРТОЧКА (ЭЛАСТИЧНАЯ ВЫСОТА) */
     .card-frame {
       width: 100%;
       max-width: 420px;
-      height: clamp(230px, 36vh, 320px);
+      flex: 1 1 auto;
+      min-height: 180px;
+      max-height: 270px;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 24px;
+      border-radius: 22px;
       position: relative;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 16px 16px 42px;
+      padding: 14px 14px 38px;
       text-align: center;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
       overflow: hidden;
       z-index: 10;
-      flex-shrink: 1;
     }
 
     .card-lang {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-weight: 500;
     }
 
     .card-quote {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.28rem, 4.4vw, 1.65rem);
-      line-height: 1.3;
+      font-size: clamp(1.2rem, 4.2vw, 1.55rem);
+      line-height: 1.28;
       color: #ffffff;
       font-weight: 300;
-      margin-bottom: 8px;
-      max-height: 60%;
+      margin-bottom: 6px;
+      max-height: 55%;
       overflow-y: auto;
       padding: 0 4px;
     }
 
     .card-trans {
-      font-size: clamp(0.72rem, 3.2vw, 0.82rem);
+      font-size: clamp(0.7rem, 3.2vw, 0.8rem);
       color: var(--text-sub);
       font-style: italic;
-      line-height: 1.4;
+      line-height: 1.35;
       font-weight: 300;
       max-width: 95%;
     }
@@ -287,7 +288,7 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      border-radius: 24px;
+      border-radius: 22px;
       z-index: 50;
       touch-action: none;
     }
@@ -295,7 +296,7 @@
     /* ПЕРЕКЛЮЧАТЕЛЬ БИЛЕТОВ ДНЯ */
     .today-tickets-bar {
       position: absolute;
-      bottom: 8px;
+      bottom: 6px;
       display: flex;
       gap: 6px;
       z-index: 20;
@@ -305,7 +306,7 @@
       border: 1px solid var(--border);
       color: var(--text-sub);
       font-size: 0.62rem;
-      padding: 4px 9px;
+      padding: 3px 8px;
       border-radius: 10px;
       cursor: pointer;
     }
@@ -315,7 +316,7 @@
       background: #1f1b12;
     }
 
-    /* НИЖНЯЯ ПАНЕЛЬ */
+    /* КОМПАКТНАЯ НИЖНЯЯ ПАНЕЛЬ (ВСЕГО 2 СТРОКИ) */
     .bottom-controls {
       width: 100%;
       max-width: 420px;
@@ -326,15 +327,22 @@
       flex-shrink: 0;
     }
 
-    .btn-main {
+    /* 1-Я СТРОКА: ГЛАВНАЯ КНОПКА + МИНИ-КНОПКИ ОЗВУЧКИ И ШЕРА */
+    .main-row {
+      display: flex;
+      gap: 6px;
       width: 100%;
-      height: 46px;
+    }
+
+    .btn-main {
+      flex: 1;
+      height: 44px;
       background: #ffffff;
       color: #000000;
       border: none;
-      border-radius: 26px;
-      font-size: 0.74rem;
-      letter-spacing: 0.15em;
+      border-radius: 22px;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       font-weight: 600;
       font-family: inherit;
@@ -350,22 +358,44 @@
       pointer-events: none !important;
     }
 
-    .sub-actions {
+    .btn-icon-sub {
+      width: 44px;
+      height: 44px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .btn-icon-sub:active {
+      border-color: #fff;
+    }
+
+    /* 2-Я СТРОКА: 3 КНОПКИ В ОДИН РЯД */
+    .sub-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1.2fr;
       gap: 6px;
+      width: 100%;
     }
 
     .btn-sub {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-sub);
-      padding: 9px;
-      border-radius: 18px;
-      font-size: 0.66rem;
-      letter-spacing: 0.1em;
+      padding: 8px 4px;
+      border-radius: 16px;
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
+      text-align: center;
+      white-space: nowrap;
     }
     .btn-sub:active {
       border-color: #ffffff;
@@ -376,16 +406,16 @@
     .reaction-fab {
       position: fixed;
       right: 14px;
-      bottom: 84px;
-      width: 48px;
-      height: 48px;
+      bottom: 80px;
+      width: 46px;
+      height: 46px;
       background: #111114;
       border: 1px solid var(--border-light);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       color: #ffffff;
       z-index: 90;
       cursor: pointer;
@@ -404,7 +434,7 @@
       100% { opacity: 0; transform: translateY(-70vh) scale(1.4); }
     }
 
-    /* МОДАЛЬНЫЕ ОКНА (КАЛИБРОВКА: ТЕПЕРЬ ВСЁ ВЛЕЗАЕТ) */
+    /* МОДАЛЬНЫЕ ОКНА */
     .manifest-modal {
       position: fixed;
       inset: 0;
@@ -426,7 +456,7 @@
       text-align: center;
       max-width: 380px;
       width: 100%;
-      max-height: 86dvh;
+      max-height: 84dvh;
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
@@ -438,7 +468,7 @@
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       flex-shrink: 0;
     }
 
@@ -446,7 +476,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(1.45rem, 5vw, 1.85rem);
       font-weight: 300;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       color: #ffffff;
       flex-shrink: 0;
     }
@@ -455,7 +485,7 @@
       font-size: clamp(0.78rem, 3.4vw, 0.86rem);
       line-height: 1.5;
       color: var(--text-sub);
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       font-weight: 300;
       white-space: pre-line;
       overflow-y: auto;
@@ -709,20 +739,25 @@
   <!-- СЕРДЕЧКО -->
   <div class="reaction-fab" id="fabBtn" onclick="spawnReaction(event)">🖤</div>
 
-  <!-- НИЖНЯЯ ПАНЕЛЬ -->
+  <!-- НИЖНЯЯ ПАНЕЛЬ (ВСЕГО 2 КОМПАКТНЫЕ СТРОКИ) -->
   <footer class="bottom-controls">
-    <button class="btn-main" id="mainActionBtn" onclick="handleAction()">
-      Стереть новый билет
-    </button>
-    <div class="sub-actions">
-      <button class="btn-sub" onclick="openManifest()">Манифест</button>
-      <button class="btn-sub" onclick="speakCompliment()">Голос</button>
-      <button class="btn-sub" onclick="shareCompliment()">Поделиться</button>
-      <button class="btn-sub" onclick="openGallery()">Галерея</button>
+    <!-- 1-я строка: Главная кнопка + Озвучка + Поделиться -->
+    <div class="main-row">
+      <button class="btn-main" id="mainActionBtn" onclick="handleAction()">
+        Стереть новый билет
+      </button>
+      <button class="btn-icon-sub" onclick="speakCompliment()" title="Озвучить">🔊</button>
+      <button class="btn-icon-sub" onclick="shareCompliment()" title="Поделиться">↗</button>
     </div>
-    <button class="btn-sub" id="secretBtn" style="width:100%; border-color: #4a3a1c; color:#e8c477;" onclick="openSecret()">
-      🔒 Секретная подсказка
-    </button>
+
+    <!-- 2-я строка: 3 кнопки в один аккуратный ряд -->
+    <div class="sub-row">
+      <button class="btn-sub" onclick="openManifest()">Манифест</button>
+      <button class="btn-sub" onclick="openGallery()">Галерея</button>
+      <button class="btn-sub" id="secretBtn" style="border-color: #5a4522; color: #e8c477;" onclick="openSecret()">
+        🔒 Секрет
+      </button>
+    </div>
   </footer>
 
   <!-- МИНИ-ИГРА -->
@@ -751,13 +786,13 @@
       <div class="manifest-tag" id="modalTag">Внимание</div>
       <h2 id="modalTitle">Заголовок</h2>
       <p id="modalDesc">Текст</p>
-      <button class="gate-btn" style="padding: 11px 26px;" onclick="closeModal()">Понятно</button>
+      <button class="gate-btn" style="padding: 10px 24px;" onclick="closeModal()">Понятно</button>
     </div>
   </div>
 
   <script>
     /* ======================================================================
-       НАСТРОЙКИ ДЛЯ БОТА TELEGRAM (разбиты через "+", чтобы GitHub не ругался)
+       НАСТРОЙКИ ДЛЯ БОТА TELEGRAM
     ====================================================================== */
     const TG_BOT_TOKEN = "8855781499:AAGNW3nBVGuIDBzmFgmSed_O1gm14XWHqjg"; 
     const TG_CHAT_ID = "8551410557";     
@@ -805,7 +840,7 @@
       { lang: "Беларуская", langCode: "be-BY", text: "Каця, твой заразлівы смех — самы лепшы сродак ад любога суму.", trans: "Катя, твой заразительный смех — лучшее лекарство от любой грусти." },
       { lang: "Українська", langCode: "uk-UA", text: "Катю, твоя щирість і світла душа надихають усіх навколо.", trans: "Катя, твоя искренность и светлая душа вдохновляют всех вокруг." },
       { lang: "Русский", langCode: "ru-RU", text: "Ты умеешь превратить самый серый понедельник в тёплый и запоминающийся вечер.", trans: "" },
-      { lang: "Polski", langCode: "pl-PL", text: "Kasiu, twoja dobroć i poczucie humoru czynią cię kimś zupełnie wyjątkowym.", trans: "Катя, твоя доброта и чувство юмора делают тебя исключительной." },
+      { lang: "Polski", langCode: "pl-PL", text: "Kasiu, twoja dobroć i poczucie humoru czynią cię kimś совершенно wyjątkowym.", trans: "Катя, твоя доброта и чувство юмора делают тебя исключительной." },
       { lang: "Português", langCode: "pt-PT", text: "A tua presença traz calma, carinho e momentos inesquecíveis.", trans: "Твоё присутствие приносит спокойствие и нежность." },
       { lang: "日本語", langCode: "ja-JP", text: "カチャ、あなたの優しさは星のように心を照らします。", trans: "Катя, твоя доброта, словно звёзды, озаряет сердце." },
       { lang: "Беларуская", langCode: "be-BY", text: "У табе столькі святла і моцы, што ніякія хмары над галавой не страшныя.", trans: "В тебе столько света и силы, что никакие тучи не страшны." },
@@ -817,7 +852,7 @@
       { lang: "Русский", langCode: "ru-RU", text: "Твоя интуиция и умение найти правильные слова в нужный момент всегда поражают.", trans: "" },
       { lang: "Беларуская", langCode: "be-BY", text: "Дзякуй за тое, што ты заўсёды шчырая і сапраўдная, без фальшу.", trans: "Спасибо за то, что ты всегда искренняя и настоящая, без притворства." },
       { lang: "한국어", langCode: "ko-KR", text: "카챠, 당신의 따뜻한 배려는 모두의 마음을 편안하게 만듭니다.", trans: "Катя, твоя тёплая забота дарит покой сердцам окружающих." },
-      { lang: "Türkçe", langCode: "tr-TR", text: "Senin gibi şefkatli, neşeli ve güzel bir kalbe sahip biri çok nadirdir.", trans: "Человек с таким добрым и весёлым сердцем — огромная редкость." },
+      { lang: "Türkçe", langCode: "tr-TR", text: "Senin gibi şefkatli, neşeli ve красивым kalbe sahip biri çok nadirdir.", trans: "Человек с таким добрым и весёлым сердцем — огромная редкость." },
       { lang: "Русский", langCode: "ru-RU", text: "Катюша, с тобой даже обычная тишина ощущается невероятно уютно и спокойно.", trans: "" },
       { lang: "ქართული", langCode: "ka-GE", text: "შენი სიკეთე და მხიარული სული ნამდვილი საჩუქარია.", trans: "Твоя доброта и весёлый дух — бесценный подарок." },
       { lang: "Беларуская", langCode: "be-BY", text: "Каця, ты ўмееш разрадзіць любое напружанне адным толькі трапным словам.", trans: "Катя, ты умеешь разрядить любую обстановку одним метким словом." },
@@ -870,7 +905,7 @@
     /* ======================================================================
        СТРИК, ДНИ И ЛИМИТ (СТРОГО 3 В ДЕНЬ)
     ====================================================================== */
-    const STORAGE_KEY = 'katia365_v5_calibrated';
+    const STORAGE_KEY = 'katia365_v6_iphone_fit';
 
     function getTodayString() {
       const now = new Date();
